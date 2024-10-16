@@ -19,54 +19,44 @@ $projects = $stmt->fetchAll();
     <style>
         body {
             font-family: 'Poppins';
+            background-color: white;
+            margin: 0;
+            padding: 0;
         }
-        .back-button {
-            display: inline-flex; 
-            align-items: center; 
-            background-color: #3C5B6F;
-            color: #DFD0B8;
-            padding: 5px 10px; 
-            margin: 10px;
-            border-radius: 10px; 
-            text-decoration: none;
-            font-size: 16px; 
-            font-weight: bold; 
-            transition: background-color 0.3s; 
-        }
-        .back-button:hover {
-            background-color: red; 
-            color: #000;
-        }
-        h1 {
+
+        h1{
             text-align: center;
             color: #333;
             margin-bottom: 70px;
         }
-
-        .container{
-            background-color: #fff;
-            border-radius: 10px;
-            padding: 20px;
+        .container {
+            margin: 2rem auto;
+            height: 350px;
+            width: 80%;
+            max-width: 900px;
+            background-color: #153448;
+            padding: 2rem;
+            border-radius: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 600px;
         }
-        /* Buttons inside container */
-        .menu-button {
-            width: 200px;
-            height: 80px;
-            background-color: #3c5162;
-            color: #ddd;
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+        .grid button {
+            background-color: #3C5B6F;
+            color: #DFD0B8;
+            padding: 1.5rem;
+            font-size: 1.2rem;
             border: none;
             border-radius: 10px;
-            font-size: 18px;
-            font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s ease;
+            transition: 0.3s;
         }
-
-        .menu-button:hover {
-            background-color: #4a6a83;
-            transform: scale(1.05);
+        .grid button:hover {
+            background-color: #153448;
+            box-shadow: 0 0 0 2px #DFD0B8;
         }
     </style>
 </head>
@@ -75,25 +65,17 @@ $projects = $stmt->fetchAll();
     <?php include '../components/back_button.php'?>
 
     <h1>Projects from <?= htmlspecialchars($project_name) ?></h1>
-    <div class="project-container">
-        <?php foreach ($projects as $project): ?>
-            <div class="project-card">
-                <h2><?= htmlspecialchars($project['project_name']) ?></h2>
-            </div>
-        <?php endforeach; ?>
-    </div>
 
     <div class="container">
-        <div class="menu-button">
-        <button class="menu-button">PO</button>
-        <button class="menu-button">SAT</button>
-        <button class="menu-button">Daily Report</button>
-        <button class="menu-button">Berita Acara</button>
-        <button class="menu-button">Daily K3</button>
-        <button class="menu-button">Serah Terima Barang</button>
-        <button class="menu-button">Invoice</button>
+        <div class="grid">
+            <button>PO</button>
+            <button>SAT</button>
+            <button>Daily Report</button>
+            <button>Berita Acara</button>
+            <button>Daily K3</button>
+            <button>Serah Terima Barang</button>
+            <button>Invoice</button>
         </div>
     </div>
-
 </body>
 </html>
