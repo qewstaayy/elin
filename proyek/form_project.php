@@ -31,6 +31,7 @@
 </head>
 <body>
 <?php include '../config.php'?>
+<?include '../components/back_button.php'?>
 
     <a href="/elin" class="back-button">
             <span class="arrow">&larr;</span> Back
@@ -119,13 +120,13 @@
     margin: 0;
     padding: 0;
     }
-
+    
     .back-button {
         display: inline-flex; 
         align-items: center; 
         background-color: #3C5B6F;
         color: #DFD0B8;
-        padding: 5px 10px; 
+        padding: 10px 18px; 
         margin: 10px;
         border-radius: 10px; 
         text-decoration: none;
@@ -133,10 +134,9 @@
         font-weight: bold; 
         transition: background-color 0.3s; 
     }
-
     .back-button:hover {
-        background-color: red; 
-        color: #000;
+         background-color: red; 
+         color: #000;
     }
 
     .arrow {
@@ -147,7 +147,7 @@
     h1 {
         text-align: center;
         color: #000;
-        margin: 10px;
+        margin: 12px;
         font-size: 45px;
     }
 

@@ -35,8 +35,8 @@ if (isset($_GET['id'])) {
         }
 
         hr{
-            height: 1px;
-            background-color: #000;
+            height: 2px;
+            background-color: #FFFFFF;
         }
 
         .data{
