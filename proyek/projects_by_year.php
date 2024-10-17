@@ -70,32 +70,34 @@ $projects = $stmt->fetchAll();
             align-items: center;
             justify-content: center;
             font-size: 18px;
-            background-color:white;
+            background-color: white;
             box-shadow: 0 0 0 2px black;
             color: black;
         }
         .project-card:hover {
             transform: scale(1.05);
         }
+        @media screen and (max-width: 768px) {
+            .project-card {
+                width: 250px;
+                height: 250px;
+            }
+        }
     </style>
 </head>
 <body>
-    <?php include '../components/header.php'?>
-    <?php include '../components/back_button.php'?>
+    <?php include '../components/header.php' ?>
+    <?php include '../components/back_button.php' ?>
 
     <h1>Projects from <?= htmlspecialchars($year) ?></h1>
 
     <div class="project-container">
         <?php foreach ($projects as $project): ?> 
-            <div class="project-card"> 
-                <a href="project_by_name.php?name=<?= $project['project_name'] ?>" class="project-card">
-                    <h2><?= htmlspecialchars($project['project_name']) ?></h2>
-                </a>
-            </div>
+            <a href="project_by_name.php?name=<?= urlencode($project['project_name']) ?>" class="project-card">
+                <h2><?= htmlspecialchars($project['project_name']) ?></h2>
+            </a>
         <?php endforeach; ?>
     </div>
-
-
 
 </body>
 </html>

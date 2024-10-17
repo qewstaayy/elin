@@ -1,39 +1,35 @@
 <?php
 require '../config.php';
 
-// Ambil parameter project_name dari URL
-$project_name = $_GET['project_name'] ?? '';
+// Periksa apakah parameter 'name' ada di URL
+if (isset($_GET['name']) && !empty($_GET['name'])) {
+    $project_name = $_GET['name'];
 
-// Debug: Cek apakah parameter diterima dengan benar
-var_dump($project_name);  // Pastikan ini mencetak nama project yang dikirimkan
+    // Mengambil proyek berdasarkan nama yang dipilih
+    $sql = "SELECT * FROM projects WHERE project_name = :project_name";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([':project_name' => $project_name]);
+    $project = $stmt->fetch();
 
-// Cek apakah parameter ada dan valid di database
-$sql = "SELECT * FROM projects WHERE LOWER(project_name) = LOWER(:project_name)";   
-$stmt = $pdo->prepare($sql);
-$stmt->execute([':project_name' => $project_name]);
-
-// Debug: Cek hasil query
-$projects = $stmt->fetch();
-var_dump($projects);  // Pastikan ini mencetak hasil query
-
-// Jika project_name tidak valid, redirect ke halaman error
-if (!$projects) {
-    header('Location: ../proyek/eror.php');
-    exit;
+    if ($project) {
+        // Jika proyek ditemukan, tampilkan judul dan data proyek
+        $title = htmlspecialchars($project['project_name']);
+    } else {
+        $title = "Project not found";
+        $description = "The project you are looking for does not exist.";
+    }
+} else {
+    // Jika parameter 'name' tidak ditemukan di URL
+    $title = "No project selected";
+    $description = "Please select a project from the list.";
 }
-
-// Ambil nama project dari hasil query
-$display_name = $projects['project_name'];
 ?>
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projects from <?= htmlspecialchars($display_name) ?></title>
+    <title>Projects from <?= htmlspecialchars($project_name) ?></title>
     <style>
         body {
             font-family: 'Poppins';
@@ -82,10 +78,7 @@ $display_name = $projects['project_name'];
     <?php include '../components/header.php'?>
     <?php include '../components/back_button.php'?>
 
-    <h1>
-            Projects from <?= htmlspecialchars($display_name) ?>
-    </h1>
-
+    <h1>Projects from <?= htmlspecialchars($project_name) ?></h1>
 
     <div class="container">
         <div class="grid">
@@ -97,7 +90,6 @@ $display_name = $projects['project_name'];
             <button>Serah Terima Barang</button>
             <button>Invoice</button>
         </div>
-        
-    </div>  
+    </div>
 </body>
 </html>
