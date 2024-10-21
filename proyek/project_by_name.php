@@ -128,7 +128,7 @@ if (isset($_GET['name']) && !empty($_GET['name'])) {
                     <button <?= $file_serah_terima ? '' : 'disabled' ?>>Serah Terima Barang</button>
                 </a>
                 <a href="<?= htmlspecialchars($file_invoice) ?>" target="_blank">
-                    <button <?= $file_invoice ? '' : 'disabled' ?>>Invoice</button>
+                    <button <?= $file_invoice ? '' : 'disabled' ?>>Invoicepe</button>
                 </a>
             <?php else: ?>
                 <p><?= $description ?></p>
