@@ -59,17 +59,17 @@
                 <label for="file_po">File PO:</label>
                 <input type="file" id="file_po" name="file_po" accept="application/pdf" class="pdf" required>
 
-            <!-- Invoice -->
-                <label for="file_invoice">Invoice:</label>
-                <input type="file" id="file_invoice" name="file_invoice" accept="application/pdf" class="pdf" required>
-
-            <!-- File Daily K3 -->
-                <label for="file_Daily_k3">File Daily K3:</label>
-                <input type="file" id="file_Daily_k3" name="file_Daily_k3" accept="application/pdf" class="pdf" required>
-
             <!-- File Daily Report -->
                 <label for="file_daily_report">File Daily Report:</label>
                 <input type="file" id="file_daily_report" name="file_daily_report" accept="application/pdf" class="pdf" required>
+
+            <!-- File  K3 -->
+                <label for="file_k3">File K3:</label>
+                <input type="file" id="file_k3" name="file_k3" accept="application/pdf" class="pdf" required>
+
+            <!-- Invoice -->
+                <label for="file_invoice">Invoice:</label>
+                <input type="file" id="file_invoice" name="file_invoice" accept="application/pdf" class="pdf" required>
 
             <!-- SAT -->
                 <label for="file_sat">SAT:</label>

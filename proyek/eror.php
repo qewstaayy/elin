@@ -6,10 +6,10 @@
     <title>Error - Project Not Found</title>
 </head>
 <body>
-    <h1 style="text-align: center; color: red;">Project Not Found</h1>
+    <h1 style="text-align: center; color: red;">Project Tidak Ditemukan</h1>
     <p style="text-align: center;">
-        The project you are looking for does not exist. <br>
-        <a href="../proyek/show_projects.php">Go back to Home</a>
+        Proyek yang Anda cari tidak ada. <br>
+        <a href="../proyek/show_projects.php">Kembali</a>
     </p>
 </body>
 </html>
