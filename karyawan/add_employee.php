@@ -18,12 +18,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $ktp_photo = $_FILES['ktp_photo']['name'];
     $kk_photo = $_FILES['kk_photo']['name'];
     $ijazah_photo = $_FILES['ijazah_photo']['name'];
+    $target_dir = "../uploads/employees/";
 
-    $target_dir = "../uploads/employees";
+    // Pastikan direktori ada, jika tidak, buat direktori
+    if (!is_dir($target_dir)) {
+        mkdir($target_dir, 0777, true); // Buat direktori dengan permission 0777
+    }
+
     $ktp_target = $target_dir . basename($ktp_photo);
     $kk_target = $target_dir . basename($kk_photo);
     $ijazah_target = $target_dir . basename($ijazah_photo);
 
+    // Pindahkan file ke folder target
     move_uploaded_file($_FILES['ktp_photo']['tmp_name'], $ktp_target);
     move_uploaded_file($_FILES['kk_photo']['tmp_name'], $kk_target);
     move_uploaded_file($_FILES['ijazah_photo']['tmp_name'], $ijazah_target);

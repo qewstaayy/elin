@@ -13,7 +13,6 @@ $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <style>
-
         body{
             margin: 0;
             padding: 0;
@@ -134,9 +133,9 @@ $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <td><?php echo $employee['alamat']; ?></td>
                     <td><?php echo $employee['tgl_masuk']; ?></td>
                     <td><?php echo $employee['gender']; ?></td>
-                    <td><img src="../uploads/employees<?php echo $employee['ktp_photo']; ?>" width="100"></td>
-                    <td><img src="../uploads/employees<?php echo $employee['kk_photo']; ?>" width="100"></td>
-                    <td><img src="../uploads/employees<?php echo $employee['ijazah_photo']; ?>" width="100"></td>
+                    <td><img src="../uploads/employees/<?php echo $employee['ktp_photo']; ?>" width="100"></td>
+                    <td><img src="../uploads/employees/<?php echo $employee['kk_photo']; ?>" width="100"></td>
+                    <td><img src="../uploads/employees/<?php echo $employee['ijazah_photo']; ?>" width="100"></td>
                     <td>
                         <a href="view.php?id=<?php echo $employee['id']; ?>">View</a> |
                         <a href="edit.php?id=<?php echo $employee['id']; ?>">Edit</a> |

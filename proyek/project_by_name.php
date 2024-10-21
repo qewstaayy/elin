@@ -24,7 +24,7 @@ if (isset($_GET['name']) && !empty($_GET['name'])) {
         $file_sat = getFilePath($project['file_sat']);
         $file_daily_report = getFilePath($project['file_daily_report']);
         $file_ba = getFilePath($project['file_ba']);
-        $file_daily_k3 = getFilePath($project['file_daily_k3']);
+        $file_daily_k3 = getFilePath($project['file_k3']);
         $file_serah_terima = getFilePath($project['file_serah_terima']);
         $file_invoice = getFilePath($project['file_invoice']);
     } else {
@@ -121,8 +121,8 @@ if (isset($_GET['name']) && !empty($_GET['name'])) {
                 <a href="<?= htmlspecialchars($file_ba) ?>" target="_blank">
                     <button <?= $file_ba ? '' : 'disabled' ?>>Berita Acara</button>
                 </a>
-                <a href="<?= htmlspecialchars($file_daily_k3) ?>" target="_blank">
-                    <button <?= $file_daily_k3 ? '' : 'disabled' ?>>Daily K3</button>
+                <a href="<?= htmlspecialchars($file_k3) ?>" target="_blank">
+                    <button <?= $file_k3 ? '' : 'disabled' ?>>Daily K3</button>
                 </a>
                 <a href="<?= htmlspecialchars($file_serah_terima) ?>" target="_blank">
                     <button <?= $file_serah_terima ? '' : 'disabled' ?>>Serah Terima Barang</button>
