@@ -27,6 +27,17 @@ if (isset($_GET['name']) && !empty($_GET['name'])) {
         $file_k3 = getFilePath($project_name, $project['file_k3']);
         $file_serah_terima = getFilePath($project_name, $project['file_serah_terima']);
         $file_invoice = getFilePath($project_name, $project['file_invoice']);
+
+        // Looping untuk SAT, BA, dan Serah Terima dari 2 hingga 10
+        $sat_files = [];
+        $ba_files = [];
+        $serah_terima_files = [];
+
+        for ($i = 2; $i <= 10; $i++) {
+            $sat_files[$i] = getFilePath($project_name, $project['file_sat_' . $i]);
+            $ba_files[$i] = getFilePath($project_name, $project['file_ba_' . $i]);
+            $serah_terima_files[$i] = getFilePath($project_name, $project['file_serah_terima_' . $i]);
+        }
     } else {
         $title = "Project not found";
         $description = "The project you are looking for does not exist.";
@@ -58,7 +69,7 @@ if (isset($_GET['name']) && !empty($_GET['name'])) {
 
         .container {
             margin: 2rem auto;
-            height: 350px;
+            height: auto;
             width: 80%;
             max-width: 900px;
             background-color: #153448;
@@ -110,30 +121,52 @@ if (isset($_GET['name']) && !empty($_GET['name'])) {
         <div class="grid">
             <?php if (isset($project)): ?>
                 <a href="<?= htmlspecialchars($file_po) ?>" target="_blank">
-                    <button <?= $file_po ? '' : 'disabled' ?>>PO</button>
+                    <button <?= $file_po ? '' : 'style="display:none"' ?>>PO</button>
                 </a>
                 <a href="<?= htmlspecialchars($file_sat) ?>" target="_blank">
-                    <button <?= $file_sat ? '' : 'disabled' ?>>SAT</button>
+                    <button <?= $file_sat ? '' : 'style="display:none"' ?>>SAT</button>
                 </a>
                 <a href="<?= htmlspecialchars($file_daily_report) ?>" target="_blank">
-                    <button <?= $file_daily_report ? '' : 'disabled' ?>>Daily Report</button>
+                    <button <?= $file_daily_report ? '' : 'style="display:none"' ?>>Daily Report</button>
                 </a>
                 <a href="<?= htmlspecialchars($file_ba) ?>" target="_blank">
-                    <button <?= $file_ba ? '' : 'disabled' ?>>Berita Acara</button>
+                    <button <?= $file_ba ? '' : 'style="display:none"' ?>>Berita Acara</button>
                 </a>
                 <a href="<?= htmlspecialchars($file_k3) ?>" target="_blank">
-                    <button <?= $file_k3 ? '' : 'disabled' ?>>Daily K3</button>
+                    <button <?= $file_k3 ? '' : 'style="display:none"' ?>>Daily K3</button>
                 </a>
                 <a href="<?= htmlspecialchars($file_serah_terima) ?>" target="_blank">
-                    <button <?= $file_serah_terima ? '' : 'disabled' ?>>Serah Terima Barang</button>
+                    <button <?= $file_serah_terima ? '' : 'style="display:none"' ?>>Serah Terima Barang</button>
                 </a>
                 <a href="<?= htmlspecialchars($file_invoice) ?>" target="_blank">
-                    <button <?= $file_invoice ? '' : 'disabled' ?>>Invoice</button>
+                    <button <?= $file_invoice ? '' : 'style="display:none"' ?>>Invoice</button>
                 </a>
+
+                <!-- Tampilkan SAT2 hingga SAT10 -->
+                <?php for ($i = 2; $i <= 10; $i++): ?>
+                    <?php if ($sat_files[$i]): ?>
+                        <a href="<?= htmlspecialchars($sat_files[$i]) ?>" target="_blank">
+                            <button>SAT <?= $i ?></button>
+                        </a>
+                    <?php endif; ?>
+
+                    <?php if ($ba_files[$i]): ?>
+                        <a href="<?= htmlspecialchars($ba_files[$i]) ?>" target="_blank">
+                            <button>Berita Acara <?= $i ?></button>
+                        </a>
+                    <?php endif; ?>
+
+                    <?php if ($serah_terima_files[$i]): ?>
+                        <a href="<?= htmlspecialchars($serah_terima_files[$i]) ?>" target="_blank">
+                            <button>Serah Terima <?= $i ?></button>
+                        </a>
+                    <?php endif; ?>
+                <?php endfor; ?>
             <?php else: ?>
                 <p>Project details not available. Please select a valid project.</p>
             <?php endif; ?>
         </div>
     </div>
+
 </body>
 </html>
