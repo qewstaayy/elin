@@ -12,36 +12,50 @@
         .form-group {
             margin-bottom: 15px;
         }
+
     </style>
     <script>
-        function toggleAdditionalFields() {
-            const sat2 = document.getElementById('file_sat_2').value;
-            const ba2Section = document.getElementById('ba_2_section');
-            const serahTerima2Section = document.getElementById('serah_terima_2_section');
-            
-            if (sat2) {
-                ba2Section.classList.remove('hidden');
-                serahTerima2Section.classList.remove('hidden');
-            } else {
-                ba2Section.classList.add('hidden');
-                serahTerima2Section.classList.add('hidden');
+        let counter = 1;
+        const maxButton = 10;
+
+        function addFields() { //Mengatur batasan pada tabel yang ditambah
+            if (counter >= maxButton){
+                alert("Sudah mencapai BATAS!!");
+                return;
             }
+
+            counter++; // Menambah hitungan set untuk SAT, BA, dan Serah Terima
+            
+            // Membuat elemen container baru
+            const container = document.createElement('div');
+            container.classList.add('form-group');
+            container.innerHTML = `
+
+                <label for="file_sat_${counter}">SAT ${counter}:</label>
+                <input type="file" id="file_sat_${counter}" name="file_sat_${counter}" accept="application/pdf" class="pdf">
+
+                <label for="file_ba_${counter}">BA ${counter}:</label>
+                <input type="file" id="file_ba_${counter}" name="file_ba_${counter}" accept="application/pdf" class="pdf2">
+
+                <label for="file_serah_terima_${counter}">Serah Terima Barang ${counter}:</label>
+                <input type="file" id="file_serah_terima_${counter}" name="file_serah_terima_${counter}" accept="application/pdf" class="pdf2">
+            `;
+            
+            // Menambahkan elemen baru ke bagian form
+            document.getElementById('dynamic-fields').appendChild(container);
         }
     </script>
 </head>
 <body>
-<?php include '../config.php'?>
-<?include '../components/back_button.php'?>
-
     <a href="/elin" class="back-button">
-            <span class="arrow">&larr;</span> Back
-        </a>
+        <span class="arrow">&larr;</span> Back
+    </a>
 
     <h1>Form Tambah Proyek</h1>
     <form action="../proyek/add_project.php" method="POST" enctype="multipart/form-data">
         <div class="part1">
-                <label for="project_name">Nama Proyek:</label>
-                <input type="text" id="project_name" name="project_name" required>
+            <label for="project_name">Nama Proyek:</label>
+            <input type="text" id="project_name" name="project_name" required>
 
             <div class="date">
                 <div class="mulai">
@@ -55,59 +69,33 @@
                 </div>
             </div>
 
-            <!-- File PO -->
-                <label for="file_po">File PO:</label>
-                <input type="file" id="file_po" name="file_po" accept="application/pdf" class="pdf" required>
+            <label for="file_po">File PO:</label>
+            <input type="file" id="file_po" name="file_po" accept="application/pdf" class="pdf" required>
 
-            <!-- File Daily Report -->
-                <label for="file_daily_report">File Daily Report:</label>
-                <input type="file" id="file_daily_report" name="file_daily_report" accept="application/pdf" class="pdf" required>
+            <label for="file_daily_report">File Daily Report:</label>
+            <input type="file" id="file_daily_report" name="file_daily_report" accept="application/pdf" class="pdf" required>
 
-            <!-- File  K3 -->
-                <label for="file_k3">File K3:</label>
-                <input type="file" id="file_k3" name="file_k3" accept="application/pdf" class="pdf" required>
+            <label for="file_k3">File K3:</label>
+            <input type="file" id="file_k3" name="file_k3" accept="application/pdf" class="pdf" required>
 
-            <!-- Invoice -->
-                <label for="file_invoice">Invoice:</label>
-                <input type="file" id="file_invoice" name="file_invoice" accept="application/pdf" class="pdf" required>
+            <label for="file_invoice">Invoice:</label>
+            <input type="file" id="file_invoice" name="file_invoice" accept="application/pdf" class="pdf" required>
 
-            <!-- SAT -->
-                <label for="file_sat">SAT:</label>
-                <input type="file" id="file_sat" name="file_sat" accept="application/pdf" class="pdf" required>
+            <label for="file_sat">SAT:</label>
+            <input type="file" id="file_sat" name="file_sat" accept="application/pdf" class="pdf" required>
+
+            <label for="file_ba">BA:</label>
+            <input type="file" id="file_ba" name="file_ba" accept="application/pdf" class="pdf2 " required>
+
+            <label for="file_serah_terima">Serah Terima:</label>
+            <input type="file" id="file_serah_terima" name="file_serah_terima" accept="application/pdf" class="pdf2 " required>
         </div>
 
         <div class="part2">
-            <!-- BA -->
-            <div class="form-group">
-                <label for="file_ba">BA:</label>
-                <input type="file" id="file_ba" name="file_ba" accept="application/pdf" class="pdf2" required>
-            </div>
+            <div id="dynamic-fields"></div> <!-- Kontainer untuk elemen dinamis -->
 
-            <!-- Serah Terima -->
-            <div class="form-group">
-                <label for="file_serah_terima">Serah Terima Barang:</label>
-                <input type="file" id="file_serah_terima" name="file_serah_terima" accept="application/pdf" class="pdf2" required>
-            </div>
-
-            <!-- SAT 2 -->
-                <label for="file_sat_2">SAT 2:</label>
-                <input type="file" id="file_sat_2" name="file_sat_2" accept="application/pdf" class="pdf" onchange="toggleAdditionalFields()">
-
-            <div class="2">
-                <!-- BA 2 dan Serah Terima 2, Hidden by Default -->
-
-                <div id="ba_2_section" class="form-group hidden">
-                    <label for="file_ba_2">BA 2:</label>
-                    <input type="file" id="file_ba_2" name="file_ba_2" accept="application/pdf" class="pdf2">
-                </div>
-
-                <div id="serah_terima_2_section" class="form-group hidden">
-                    <label for="file_serah_terima_2">Serah Terima Barang 2:</label>
-                    <input type="file" id="file_serah_terima_2" name="file_serah_terima_2" accept="application/pdf" class="pdf2">
-                </div>
-            </div>
-
-            <button type="submit">Submit</button> 
+            <button type="button" onclick="addFields()">Tambah SAT, BA, dan Serah Terima</button>
+            <button type="submit" class="submit">Submit</button>
         </div>
     </form>
 </body>
@@ -273,20 +261,23 @@
         color: #DFD0B8;
         padding: 10px 20px;
         margin-top: 30px;
+        margin: 0 10px;
         float: right;
         border: none;
         border-radius: 5px;
         cursor: pointer;
         font-size: 16px;
+        justify-content: space-between;
     }
 
     form button:hover {
         background-color: #3C5B6F;
         color: #DFD0B8;
-        box-shadow: 0px 3px 7px 0px black;
+        box-shadow: 0px 3px 5px 0px black;
         font-weight: bold;
     }
 
+    
     .container {
         display: flex;
         justify-content: space-between;
