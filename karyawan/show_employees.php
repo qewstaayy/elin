@@ -133,9 +133,10 @@ $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <td><?php echo $employee['alamat']; ?></td>
                     <td><?php echo $employee['tgl_masuk']; ?></td>
                     <td><?php echo $employee['gender']; ?></td>
-                    <td><img src="../uploads/employees/<?php echo $employee['ktp_photo']; ?>" width="100"></td>
-                    <td><img src="../uploads/employees/<?php echo $employee['kk_photo']; ?>" width="100"></td>
-                    <td><img src="../uploads/employees/<?php echo $employee['ijazah_photo']; ?>" width="100"></td>
+                    <td><img src="../uploads/employees/<?php echo str_replace(' ', '_', $employee['name']) . '/' . $employee['ktp_photo']; ?>" width="100" alt="KTP Photo"></td>
+                    <td><img src="../uploads/employees/<?php echo str_replace(' ', '_', $employee['name']) . '/' . $employee['kk_photo']; ?>" width="100" alt="KK Photo"></td>
+                    <td><img src="../uploads/employees/<?php echo str_replace(' ', '_', $employee['name']) . '/' . $employee['ijazah_photo']; ?>" width="100" alt="Ijazah Photo"></td>
+
                     <td>
                         <a href="view.php?id=<?php echo $employee['id']; ?>">View</a> |
                         <a href="edit.php?id=<?php echo $employee['id']; ?>">Edit</a> |

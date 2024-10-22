@@ -18,22 +18,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $ktp_photo = $_FILES['ktp_photo']['name'];
     $kk_photo = $_FILES['kk_photo']['name'];
     $ijazah_photo = $_FILES['ijazah_photo']['name'];
-    $target_dir = "../uploads/employees/";
 
-    // Pastikan direktori ada, jika tidak, buat direktori
-    if (!is_dir($target_dir)) {
-        mkdir($target_dir, 0777, true); // Buat direktori dengan permission 0777
+    // Buat folder khusus berdasarkan nama karyawan
+    $target_dir = "../uploads/employees/" . str_replace(' ', '_', $name) . "/"; // Ganti spasi dengan underscore
+    if (!file_exists($target_dir)) {
+        mkdir($target_dir, 0777, true); // Buat folder dengan izin 0777
     }
 
+    // Lokasi penyimpanan file
     $ktp_target = $target_dir . basename($ktp_photo);
     $kk_target = $target_dir . basename($kk_photo);
     $ijazah_target = $target_dir . basename($ijazah_photo);
 
-    // Pindahkan file ke folder target
+    // Pindahkan file ke folder yang sudah dibuat
     move_uploaded_file($_FILES['ktp_photo']['tmp_name'], $ktp_target);
     move_uploaded_file($_FILES['kk_photo']['tmp_name'], $kk_target);
     move_uploaded_file($_FILES['ijazah_photo']['tmp_name'], $ijazah_target);
 
+    // Simpan data ke database
     $sql = "INSERT INTO employees (name, email, no_hp, alamat, tgl_masuk, nama_bank, no_rek, no_bpjs, gender, uk_baju, uk_celana, uk_sepatu, kk_photo, ktp_photo, ijazah_photo)
             VALUES (:name, :email, :no_hp, :alamat, :tgl_masuk, :nama_bank, :no_rek, :no_bpjs, :gender, :uk_baju, :uk_celana, :uk_sepatu, :ktp_photo, :kk_photo, :ijazah_photo)";
 
@@ -51,9 +53,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ':uk_baju' => $uk_baju,
         ':uk_celana' => $uk_celana,
         ':uk_sepatu' => $uk_sepatu,
-        ':ktp_photo' => $ktp_photo,
-        ':kk_photo' => $kk_photo,
-        ':ijazah_photo' => $ijazah_photo
+        ':ktp_photo' => basename($ktp_photo), // Simpan nama file saja ke database
+        ':kk_photo' => basename($kk_photo),   // Simpan nama file saja ke database
+        ':ijazah_photo' => basename($ijazah_photo) // Simpan nama file saja ke database
     ]);
 
     header('Location: ../karyawan/show_employees.php?success=1');
