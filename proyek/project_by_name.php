@@ -12,22 +12,21 @@ if (isset($_GET['name']) && !empty($_GET['name'])) {
     $project = $stmt->fetch();
 
     if ($project) {
+        // Jika proyek ditemukan, ambil nama proyek dan path PDF terkait
         $title = htmlspecialchars($project['project_name']);
 
-        // Fungsi untuk menggabungkan path folder dengan nama file PDF di dalam subfolder
-        function getFilePath($project_name, $folder_name, $file_name) {
-            $file_path = "../uploads/projects/" . rawurlencode($project_name) . "/" . rawurlencode($folder_name) . "/" . rawurlencode($file_name);
-            return file_exists($file_path) ? $file_path : null;
+        // Gabungkan path folder uploads dengan nama proyek dan nama file dari database
+        function getFilePath($project_name, $file) {
+            return !empty($file) ? '../uploads/projects/' . rawurlencode(str_replace(' ', '_', $project_name)) . '/' . rawurlencode($file) : null;
         }
 
-        // Dapatkan file PDF sesuai nama proyek, dari subfolder
-        $file_po = getFilePath($project_name, 'po', 'po.pdf');
-        $file_sat = getFilePath($project_name, 'sat', 'sat.pdf');
-        $file_daily_report = getFilePath($project_name, 'daily_report', 'daily_report.pdf');
-        $file_ba = getFilePath($project_name, 'ba', 'ba.pdf');
-        $file_k3 = getFilePath($project_name, 'k3', 'k3.pdf');
-        $file_serah_terima = getFilePath($project_name, 'serah_terima', 'serah_terima.pdf');
-        $file_invoice = getFilePath($project_name, 'invoice', 'invoice.pdf');
+        $file_po = getFilePath($project_name, $project['file_po']);
+        $file_sat = getFilePath($project_name, $project['file_sat']);
+        $file_daily_report = getFilePath($project_name, $project['file_daily_report']);
+        $file_ba = getFilePath($project_name, $project['file_ba']);
+        $file_k3 = getFilePath($project_name, $project['file_k3']);
+        $file_serah_terima = getFilePath($project_name, $project['file_serah_terima']);
+        $file_invoice = getFilePath($project_name, $project['file_invoice']);
     } else {
         $title = "Project not found";
         $description = "The project you are looking for does not exist.";
@@ -36,9 +35,7 @@ if (isset($_GET['name']) && !empty($_GET['name'])) {
     $title = "No project selected";
     $description = "Please select a project from the list.";
 }
-
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -112,32 +109,31 @@ if (isset($_GET['name']) && !empty($_GET['name'])) {
     <div class="container">
         <div class="grid">
             <?php if (isset($project)): ?>
-                <a href="<?= $file_po ?>" target="_blank">
+                <a href="<?= htmlspecialchars($file_po) ?>" target="_blank">
                     <button <?= $file_po ? '' : 'disabled' ?>>PO</button>
                 </a>
-                <a href="<?= $file_sat ?>" target="_blank">
+                <a href="<?= htmlspecialchars($file_sat) ?>" target="_blank">
                     <button <?= $file_sat ? '' : 'disabled' ?>>SAT</button>
                 </a>
-                <a href="<?= $file_daily_report ?>" target="_blank">
+                <a href="<?= htmlspecialchars($file_daily_report) ?>" target="_blank">
                     <button <?= $file_daily_report ? '' : 'disabled' ?>>Daily Report</button>
                 </a>
-                <a href="<?= $file_ba ?>" target="_blank">
+                <a href="<?= htmlspecialchars($file_ba) ?>" target="_blank">
                     <button <?= $file_ba ? '' : 'disabled' ?>>Berita Acara</button>
                 </a>
-                <a href="<?= $file_k3 ?>" target="_blank">
+                <a href="<?= htmlspecialchars($file_k3) ?>" target="_blank">
                     <button <?= $file_k3 ? '' : 'disabled' ?>>Daily K3</button>
                 </a>
-                <a href="<?= $file_serah_terima ?>" target="_blank">
+                <a href="<?= htmlspecialchars($file_serah_terima) ?>" target="_blank">
                     <button <?= $file_serah_terima ? '' : 'disabled' ?>>Serah Terima Barang</button>
                 </a>
-                <a href="<?= $file_invoice ?>" target="_blank">
+                <a href="<?= htmlspecialchars($file_invoice) ?>" target="_blank">
                     <button <?= $file_invoice ? '' : 'disabled' ?>>Invoice</button>
                 </a>
             <?php else: ?>
-                <p><?= $description ?></p>
+                <p>Project details not available. Please select a valid project.</p>
             <?php endif; ?>
         </div>
     </div>
 </body>
 </html>
-
