@@ -1,4 +1,6 @@
 <?php
+require '../config.php';
+
 if (isset($_POST['update_project'])) {
     $project_name = $_GET['name']; // Ambil nama proyek dari URL
 
@@ -43,10 +45,6 @@ if (isset($_POST['update_project'])) {
 
     echo "Project updated successfully!";
 }
-
-
-
-require '../config.php';
 
 // Ambil nama proyek dari URL
 if (isset($_GET['name']) && !empty($_GET['name'])) {
@@ -109,4 +107,55 @@ if (isset($_GET['name']) && !empty($_GET['name'])) {
 } else {
     echo "No project selected.";
 }
+?>
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Deleted</title>
+    <style>
+        body {
+         
+        }
+
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .message {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+
+        .back-button {
+            background-color: #3C5B6F;
+            color: #DFD0B8;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .back-button:hover {
+            background-color: #153448;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <p class="message">Project</p>
+        <a href="index.php" class="back-button">← Back</a>
+    </div>
+</body>
+</html>

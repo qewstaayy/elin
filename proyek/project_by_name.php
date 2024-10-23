@@ -1,11 +1,6 @@
 <?php
 require '../config.php';
 
-search: <<<<<<< HEAD
-
-// Periksa apakah parameter 'name' ada di URL
-=======
->>>>>>> 57e1c49f653323bd9dde3731d96e63bd713a884c
 if (isset($_GET['name']) && !empty($_GET['name'])) {
     $project_name = $_GET['name'];
 
@@ -54,6 +49,13 @@ if (isset($_GET['name']) && !empty($_GET['name'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $title ?></title>
+
+    <script>
+    function confirmDelete() {
+        return confirm("Apakah Anda yakin ingin menghapus project ini?");
+    }
+    </script>
+
     <style>
         body {
             font-family: 'Poppins';
@@ -110,13 +112,61 @@ if (isset($_GET['name']) && !empty($_GET['name'])) {
             background-color: #888;
             cursor: not-allowed;
         }
+
+        .update-button {
+            position: absolute; /* Atau gunakan 'fixed' jika ingin tombol tetap di tempat saat scroll */
+            top: 1rem; /* Jarak dari atas */
+            right: 1rem; /* Jarak dari kanan */
+            background-color: #153448;
+            color: #DFD0B8;
+            border: none;
+            padding: 0.8rem 1.2rem;
+            margin-top: 100px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 16.5px;
+            font-family: 'Poppins';
+        }
+
+        .update-button:hover {
+            background-color: #3C5B6F;
+            box-shadow: 4px 4px 5px 0  #153448;
+        }
+
+        .delete-button {
+            position: absolute; /* Atau gunakan 'fixed' jika ingin tombol tetap di tempat saat scroll */
+            top: 1rem; /* Jarak dari atas */
+            right: 9rem; /* Jarak dari kanan */
+            background-color: #153448;
+            color: #DFD0B8;
+            border: none;
+            padding: 0.8rem 1.2rem;
+            margin-top: 100px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 16.5px;
+            font-family: 'Poppins';
+        }
+
+        .delete-button:hover {
+            background-color: #3C5B6F;
+            box-shadow: 4px 4px 5px 0  #153448;
+        }
     </style>
 </head>
 <body>
     <?php include '../components/header.php'; ?>
     <?php include '../components/back_button.php'; ?>
 
-    <a href="update.php?name=<?= urlencode($project['project_name']) ?>">Update</a>
+    <a href="update.php?name=<?= urlencode($project['project_name']) ?>">
+        <button class="update-button">Update</button>
+    </a>
+
+    <a href="delete.php?name=<?= urlencode($project['project_name']) ?>" onclick="return confirmDelete();">
+        <button class="delete-button">Delete</button>
+    </a>
 
     <h1><?= $title ?></h1>
 
