@@ -1,22 +1,22 @@
 <?php
 require '../config.php';
 
+search: <<<<<<< HEAD
 
 // Periksa apakah parameter 'name' ada di URL
+=======
+>>>>>>> 57e1c49f653323bd9dde3731d96e63bd713a884c
 if (isset($_GET['name']) && !empty($_GET['name'])) {
     $project_name = $_GET['name'];
 
-    // Ambil proyek berdasarkan nama dari database
     $sql = "SELECT * FROM projects WHERE project_name = :project_name";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([':project_name' => $project_name]);
     $project = $stmt->fetch();
 
     if ($project) {
-        // Jika proyek ditemukan, ambil nama proyek dan path PDF terkait
         $title = htmlspecialchars($project['project_name']);
 
-        // Gabungkan path folder uploads dengan nama proyek dan nama file dari database
         function getFilePath($project_name, $file) {
             return !empty($file) ? '../uploads/projects/' . rawurlencode(str_replace(' ', '_', $project_name)) . '/' . rawurlencode($file) : null;
         }
@@ -29,7 +29,7 @@ if (isset($_GET['name']) && !empty($_GET['name'])) {
         $file_serah_terima = getFilePath($project_name, $project['file_serah_terima']);
         $file_invoice = getFilePath($project_name, $project['file_invoice']);
 
-        // Looping untuk SAT, BA, dan Serah Terima dari 2 hingga 10
+        // Looping 
         $sat_files = [];
         $ba_files = [];
         $serah_terima_files = [];
@@ -115,6 +115,8 @@ if (isset($_GET['name']) && !empty($_GET['name'])) {
 <body>
     <?php include '../components/header.php'; ?>
     <?php include '../components/back_button.php'; ?>
+
+    <a href="update.php?name=<?= urlencode($project['project_name']) ?>">Update</a>
 
     <h1><?= $title ?></h1>
 
