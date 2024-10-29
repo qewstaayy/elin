@@ -160,9 +160,8 @@ if (isset($_GET['name']) && !empty($_GET['name'])) {
     <?php include '../components/header.php'; ?>
     <?php include '../components/back_button.php'; ?>
 
-    <a href="update.php?name=<?= urlencode($project['project_name']) ?>">
-        <button class="update-button">Update</button>
-    </a>
+    <a href="update.php?id=<?php echo $project['id']; ?>">Edit Proyek</a>
+
 
     <a href="delete.php?name=<?= urlencode($project['project_name']) ?>" onclick="return confirmDelete();">
         <button class="delete-button">Delete</button>
