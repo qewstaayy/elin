@@ -42,6 +42,23 @@ if (isset($_GET['name']) && !empty($_GET['name'])) {
     $title = "No project selected";
     $description = "Please select a project from the list.";
 }
+
+// Proses penghapusan jika tombol delete ditekan
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
+    $sql_delete = "DELETE FROM projects WHERE project_name = :project_name";
+    $stmt_delete = $pdo->prepare($sql_delete);
+    $stmt_delete->execute([':project_name' => $project_name]);
+    
+    // Hapus direktori dan file terkait (opsional)
+    $project_dir = '../uploads/projects/' . rawurlencode(str_replace(' ', '_', $project_name));
+    if (is_dir($project_dir)) {
+        array_map('unlink', glob("$project_dir/*.*")); // Hapus semua file di folder
+        rmdir($project_dir); // Hapus folder proyek
+    }
+
+    header("Location: project_list.php"); // Redirect setelah penghapusan
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -160,10 +177,10 @@ if (isset($_GET['name']) && !empty($_GET['name'])) {
     <?php include '../components/header.php'; ?>
     <?php include '../components/back_button.php'; ?>
 
-    <a href="update.php?id=<?php echo $project['id']; ?>">Edit Proyek</a>
-
-
-    <a href="delete.php?name=<?= urlencode($project['project_name']) ?>" onclick="return confirmDelete();">
+    <a href="update.php?id=<?php echo $project['id']; ?>">
+        <button class="update-button"> Update</button>
+    </a>
+    <a href="delete.php?id=<?= $project['id'] ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus proyek ini?');">
         <button class="delete-button">Delete</button>
     </a>
 
