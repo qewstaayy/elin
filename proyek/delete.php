@@ -18,4 +18,3 @@ if (isset($_GET['id'])) {
 } else {
     echo "ID proyek tidak ditemukan.";
 }
-?>
