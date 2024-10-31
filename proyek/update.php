@@ -1,7 +1,6 @@
 <?php
 require '../config.php';
 
-// Retrieve project data for form display
 $project = null;
 if (isset($_GET['id']) && !empty($_GET['id'])) {
     $project_id = $_GET['id'];
@@ -9,9 +8,20 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     $stmt->execute([$project_id]);
     $project = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (!$project) die("Proyek dengan ID $project_id tidak ditemukan.");
+    if (!$project) {
+        echo "<p style='color: red;'>Proyek dengan ID $project_id tidak ditemukan. Mohon cek ID proyek yang valid.</p>";
+        exit();
+    }
 } else {
-    die("ID proyek tidak ditemukan.");
+    echo "<p style='color: red;'>ID proyek tidak ditemukan. Pastikan URL memiliki parameter ID yang benar.</p>";
+    exit();
+}
+// Menghitung kelompok SAT, BA, Serah Terima yang ada
+$existingGroups = 0;
+for ($i = 1; $i <= 10; $i++) {
+    if (!empty($project["file_sat_$i"]) || !empty($project["file_ba_$i"]) || !empty($project["file_serah_terima_$i"])) {
+        $existingGroups = $i;
+    }
 }
 
 // Check if form is submitted
@@ -25,41 +35,53 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
     $upload_dir = "../uploads/projects/" . rawurlencode($project_name) . "/";
     if (!is_dir($upload_dir)) mkdir($upload_dir, 0777, true);
 
-    // Function to handle file upload and fallback to existing file if no new file is uploaded
+   // Function to handle file upload
     function handleUpload($field, $upload_dir) {
-        if (!empty($_FILES[$field]['name'])) {
-            $filename = $_FILES[$field]['name'];
-            if (move_uploaded_file($_FILES[$field]['tmp_name'], $upload_dir . $filename)) {
+        if (isset($_FILES[$field]) && $_FILES[$field]['error'] === UPLOAD_ERR_OK) {
+            // Ensure upload directory exists
+            if (!is_dir($upload_dir)) {
+                mkdir($upload_dir, 0777, true);
+            }
+
+            // Generate a unique file name to avoid overwriting existing files
+            $filename = basename($_FILES[$field]['name']);
+            $target_file = $upload_dir . $filename;
+
+            // Move uploaded file to the target directory
+            if (move_uploaded_file($_FILES[$field]['tmp_name'], $target_file)) {
                 return $filename;
             } else {
-                echo "Error uploading $field file.";
+                echo "Error: Failed to upload $field file.";
+                return null;
             }
         }
+        // Return existing file if no new file is uploaded
         return $_POST["existing_$field"] ?? null;
     }
 
-    // Handle main project files
-    $file_po = handleUpload('file_po', $upload_dir);
-    $file_daily_report = handleUpload('file_daily_report', $upload_dir);
-    $file_k3 = handleUpload('file_k3', $upload_dir);
-    $file_invoice = handleUpload('file_invoice', $upload_dir);
-    $file_sat = handleUpload('file_sat', $upload_dir);
-    $file_ba = handleUpload('file_ba', $upload_dir);
-    $file_serah_terima = handleUpload('file_serah_terima', $upload_dir);
-    $file_sat_2 = handleUpload('file_sa_2t', $upload_dir);
-    $file_ba_2 = handleUpload('file_ba_2', $upload_dir);
-    $file_serah_terima_2 = handleUpload('file_serah_terima_2', $upload_dir);
-
-    // Update project details in database for main files
-    $sql = "UPDATE projects SET project_name = ?, start_date = ?, end_date = ?, file_po = ?, file_daily_report = ?, file_k3 = ?, file_invoice = ?, file_sat = ?, file_ba = ?, file_serah_terima = ?, file_sat_2 = ?, file_ba_2 = ?, file_serah_terima_2 = ? WHERE id = ?";
+    // Tentukan direktori tujuan upload
+    $upload_dir = "../uploads/projects/" . rawurlencode($project_name) . "/";
+    
+    // Panggil handleUpload untuk setiap file
+    $file_po = handleUpload('file_po', $upload_dir) ?: $project['file_po'];
+    $file_daily_report = handleUpload('file_daily_report', $upload_dir) ?: $project['file_daily_report'];
+    $file_k3 = handleUpload('file_k3', $upload_dir) ?: $project['file_k3'];
+    $file_invoice = handleUpload('file_invoice', $upload_dir) ?: $project['file_invoice'];
+    $file_sat = handleUpload('file_sat', $upload_dir) ?: $project['file_sat'];
+    $file_ba = handleUpload('file_ba', $upload_dir) ?: $project['file_ba'];
+    $file_serah_terima = handleUpload('file_serah_terima', $upload_dir) ?: $project['file_serah_terima'];
+    
+    // Kueri Update
+    $sql = "UPDATE projects SET project_name = ?, start_date = ?, end_date = ?, file_po = ?, file_daily_report = ?, file_k3 = ?, file_invoice = ?, file_sat = ?, file_ba = ?, file_serah_terima = ? WHERE id = ?";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$project_name, $start_date, $end_date, $file_po, $file_daily_report, $file_k3, $file_invoice, $file_sat, $file_ba, $file_serah_terima, $file_sat_2, $file_ba_2, $file_serah_terima_2, $project_id]);
+    $stmt->execute([$project_name, $start_date, $end_date, $file_po, $file_daily_report, $file_k3, $file_invoice, $file_sat, $file_ba, $file_serah_terima, $project_id]);
+    
 
     // Handle SAT, BA, and Serah Terima files up to a maximum of 10
     for ($i = 1; $i <= 10; $i++) {
         $file_sat = handleUpload("file_sat_$i", $upload_dir);
         $file_ba = handleUpload("file_ba_$i", $upload_dir);
-        $file_serah_terima = handleUpload("file_serah_terima_$i", $upload_dir);
+        $file_serah_terima = handleUpload("file_serah_terima_$i", upload_dir: $upload_dir);
 
         // Only update the database if files were uploaded or existed previously
         if ($file_sat || $file_ba || $file_serah_terima) {
@@ -69,7 +91,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
         }
     }
 
-    header("Location: project_by_name.php?success=1");
+    // Redirect after update
+    header("Location: project_by_name.php?name=" . urlencode($project_name));
     exit();
 }
 ?>
@@ -153,34 +176,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
         }
     </style>
 
-    <script>
-        let counter = document.querySelectorAll('.field-group').length + 1;
-        const maxCounter = 10;
+<script>
+    // Menyimpan jumlah kelompok yang ada dari PHP ke JavaScript
+    let counter = <?php echo $existingGroups + 1; ?>;
+    const maxCounter = 10;
 
-        function addFields() {
-            if (counter > maxCounter) {
-                alert("Sudah mencapai batas maksimal.");
-                return;
-            }
-        
-            const container = document.createElement('div');
-            container.className = 'field-group';
-            container.innerHTML = `
-                <label for="file_sat_${counter}">SAT ${counter}:</label>
-                <input type="file" id="file_sat_${counter}" name="file_sat_${counter}" accept="application/pdf">
-        
-                <label for="file_ba_${counter}">BA ${counter}:</label>
-                <input type="file" id="file_ba_${counter}" name="file_ba_${counter}" accept="application/pdf">
-        
-                <label for="file_serah_terima_${counter}">Serah Terima ${counter}:</label>
-                <input type="file" id="file_serah_terima_${counter}" name="file_serah_terima_${counter}" accept="application/pdf">
-            `;
-        
-            document.getElementById('dynamic-fields').appendChild(container);
-            counter++;
+    function addFields() {
+        if (counter > maxCounter) {
+            alert("Sudah mencapai batas maksimal.");
+            return;
         }
 
-    </script>
+        const container = document.createElement('div');
+        container.className = 'field-group';
+        container.innerHTML = `
+            <label for="file_sat_${counter}">SAT ${counter}:</label>
+            <input type="file" id="file_sat_${counter}" name="file_sat_${counter}" accept="application/pdf">
+
+            <label for="file_ba_${counter}">BA ${counter}:</label>
+            <input type="file" id="file_ba_${counter}" name="file_ba_${counter}" accept="application/pdf">
+
+            <label for="file_serah_terima_${counter}">Serah Terima ${counter}:</label>
+            <input type="file" id="file_serah_terima_${counter}" name="file_serah_terima_${counter}" accept="application/pdf">
+        `;
+
+        document.getElementById('dynamic-fields').appendChild(container);
+        counter++;
+    }
+</script>
 
 </head>
 <body>
@@ -199,96 +222,78 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
             <label for="end_date">Tanggal Selesai:</label>
             <input type="date" name="end_date" value="<?php echo $project['end_date']; ?>" required>
 
+            <!-- File Fields -->
             <label>File PO:</label>
             <?php if ($project['file_po']): ?>
-                <?php 
-                    $file_po_path = "../uploads/projects/" . rawurlencode($project['project_name']) . '/' . rawurlencode($project['file_po']); 
-                    echo "<!-- Debug: File path is $file_po_path -->"; // Ini untuk debugging
-                ?>
-                <a href="<?php echo $file_po_path; ?>" target="_blank" class="view-button">View PO</a>
+                <a href="../uploads/projects/<?php echo rawurlencode($project['project_name']) . '/' . rawurlencode($project['file_po']); ?>" target="_blank" class="view-button">View PO</a>
             <?php endif; ?>
-            <input type="file" name="file_po">
+            <input type="file" name="file_po" accept="application/pdf">
 
-            <!-- Repeat for each file type -->
-            <label>Daily Report:</label>
-            <?php if ($project['file_daily_report']): ?>
-                <?php 
-                    $file_daily_report_path = "../uploads/projects/" . rawurlencode($project['project_name']) . '/' . rawurlencode($project['file_daily_report']); 
-                    echo "<!-- Debug: File path is $file_daily_report_path -->"; // Ini untuk debugging
-                ?>
-                <a href="<?php echo $file_daily_report_path; ?>" target="_blank" class="view-button">View Daily Report</a>
-            <?php endif; ?>
-            <input type="file" name="file_daily_report">
-
-            <label>K3:</label>
+            <label>File K3:</label>
             <?php if ($project['file_k3']): ?>
-                <a href="../uploads/projects/<?php echo rawurlencode($project['project_name']) . '/' . $project['file_k3']; ?>" target="_blank" class="view-button">View K3</a>
+                <a href="../uploads/projects/<?php echo rawurlencode($project['project_name']) . '/' . rawurlencode($project['file_k3']); ?>" target="_blank" class="view-button">View K3</a>
             <?php endif; ?>
-            <input type="file" name="file_k3">
+            <input type="file" name="file_k3" accept="application/pdf">
 
-            <label>Invoice:</label>
+            <label>File Daily Report:</label>
+            <?php if ($project['file_daily_report']): ?>
+                <a href="../uploads/projects/<?php echo rawurlencode($project['project_name']) . '/' . rawurlencode($project['file_daily_report']); ?>" target="_blank" class="view-button">View Daily Report</a>
+            <?php endif; ?>
+            <input type="file" name="file_daily_report" accept="application/pdf">
+
+            <label>File Invoice:</label>
             <?php if ($project['file_invoice']): ?>
-                <a href="../uploads/projects/<?php echo rawurlencode($project['project_name']) . '/' . $project['file_invoice']; ?>" target="_blank" class="view-button">View Invoice</a>
+                <a href="../uploads/projects/<?php echo rawurlencode($project['project_name']) . '/' . rawurlencode($project['file_invoice']); ?>" target="_blank" class="view-button">View Invoice</a>
             <?php endif; ?>
-            <input type="file" name="file_invoice">
+            <input type="file" name="file_invoice" accept="application/pdf">
 
-            <label>SAT:</label>
+            <label>File SAT:</label>
             <?php if ($project['file_sat']): ?>
-                <a href="../uploads/projects/<?php echo rawurlencode($project['project_name']) . '/' . $project['file_sat']; ?>" target="_blank" class="view-button">View SAT</a>
+                <a href="../uploads/projects/<?php echo rawurlencode($project['project_name']) . '/' . rawurlencode($project['file_sat']); ?>" target="_blank" class="view-button">View SAT</a>
             <?php endif; ?>
-            <input type="file" name="file_sat">
+            <input type="file" name="file_sat" accept="application/pdf">
 
-            <label>BA:</label>
+            <label>File Berita Acara:</label>
             <?php if ($project['file_ba']): ?>
-                <a href="../uploads/projects/<?php echo rawurlencode($project['project_name']) . '/' . $project['file_ba']; ?>" target="_blank" class="view-button">View BA</a>
+                <a href="../uploads/projects/<?php echo rawurlencode($project['project_name']) . '/' . rawurlencode($project['file_ba']); ?>" target="_blank" class="view-button">View Berita Acara</a>
             <?php endif; ?>
-            <input type="file" name="file_ba">
+            <input type="file" name="file_ba" accept="application/pdf">
 
-            <label>Serah Terima:</label>
+            <label>File Serah Terima:</label>
             <?php if ($project['file_serah_terima']): ?>
-                <a href="../uploads/projects/<?php echo rawurlencode($project['project_name']) . '/' . $project['file_serah_terima']; ?>" target="_blank" class="view-button">View Serah Terima</a>
+                <a href="../uploads/projects/<?php echo rawurlencode($project['project_name']) . '/' . rawurlencode($project['file_serah_terima']); ?>" target="_blank" class="view-button">View Serah Terima</a>
             <?php endif; ?>
-            <input type="file" name="file_serah_terima">
+            <input type="file" name="file_serah_terima" accept="application/pdf">
 
-
-            <!-- Dynamic SAT, BA, and Serah Terima Fields -->
+            <!-- Additional Files (loop SAT, BA, Serah Terima) -->
             <div id="dynamic-fields">
-            <?php for ($i = 2; $i <= 10; $i++): ?>
-                <?php if (!empty($project["file_sat_$i"]) || !empty($project["file_ba_$i"]) || !empty($project["file_serah_terima_$i"])): ?>
-                
-                    <label for="file_sat_<?php echo $i; ?>">SAT <?php echo $i; ?>:</label>
-                    <?php if (!empty($project["file_sat_$i"])): ?>
-                        <a href="../uploads/projects/<?php echo rawurlencode($project['project_name']) . '/' . rawurlencode($project["file_sat_$i"]); ?>"
-                           target="_blank" class="view-button">View SAT <?php echo $i; ?></a>
-                    <?php endif; ?>
-                    <input type="file" name="file_sat_<?php echo $i; ?>" accept="application/pdf">
-                    
-                    <label for="file_ba_<?php echo $i; ?>">BA <?php echo $i; ?>:</label>
-                    <?php if (!empty($project["file_ba_$i"])): ?>
-                        <a href="../uploads/projects/<?php echo rawurlencode($project['project_name']) . '/' . rawurlencode($project["file_ba_$i"]); ?>"
-                           target="_blank" class="view-button">View BA <?php echo $i; ?></a>
-                    <?php endif; ?>
-                    <input type="file" name="file_ba_<?php echo $i; ?>" accept="application/pdf">
-                    
-                    <label for="file_serah_terima_<?php echo $i; ?>">Serah Terima <?php echo $i; ?>:</label>
-                    <?php if (!empty($project["file_serah_terima_$i"])): ?>
-                        <a href="../uploads/projects/<?php echo rawurlencode($project['project_name']) . '/' . rawurlencode($project["file_serah_terima_$i"]); ?>"
-                           target="_blank" class="view-button">View Serah Terima <?php echo $i; ?></a>
-                    <?php endif; ?>
-                    <input type="file" name="file_serah_terima_<?php echo $i; ?>" accept="application/pdf">
-                    
-                <?php endif; ?>
-            <?php endfor; ?>
+                <?php for ($i = 2; $i <= $existingGroups; $i++): ?>
+                    <div class="field-group">
+                        <label>SAT <?php echo $i; ?>:</label>
+                        <?php if ($project["file_sat_$i"]): ?>
+                            <a href="../uploads/projects/<?php echo rawurlencode($project['project_name']) . '/' . rawurlencode($project["file_sat_$i"]); ?>" target="_blank" class="view-button">View SAT <?php echo $i; ?></a>
+                        <?php endif; ?>
+                        <input type="file" name="file_sat_<?php echo $i; ?>" accept="application/pdf">
+
+                        <label>BA <?php echo $i; ?>:</label>
+                        <?php if ($project["file_ba_$i"]): ?>
+                            <a href="../uploads/projects/<?php echo rawurlencode($project['project_name']) . '/' . rawurlencode($project["file_ba_$i"]); ?>" target="_blank" class="view-button">View BA <?php echo $i; ?></a>
+                        <?php endif; ?>
+                        <input type="file" name="file_ba_<?php echo $i; ?>" accept="application/pdf">
+
+                        <label>Serah Terima <?php echo $i; ?>:</label>
+                        <?php if ($project["file_serah_terima_$i"]): ?>
+                            <a href="../uploads/projects/<?php echo rawurlencode($project['project_name']) . '/' . rawurlencode($project["file_serah_terima_$i"]); ?>" target="_blank" class="view-button">View Serah Terima <?php echo $i; ?></a>
+                        <?php endif; ?>
+                        <input type="file" name="file_serah_terima_<?php echo $i; ?>" accept="application/pdf">
+                    </div>
+                <?php endfor; ?>
             </div>
 
+            <button type="button" onclick="addFields()" class="tambah-button">Tambah Kelompok SAT, BA, Serah Terima</button>
 
-            <!-- Dynamic Fields Container -->
-
-            <div id="dynamic-fields"></div>
-
-            <!-- Add More Fields Button -->
-            <button type="button" class="tambah-button" onclick="addFields()">Tambah SAT, BA, Serah Terima</button>
-            <button type="submit" name="update" class="update-button">Update Project</button>
+            <!-- Update Button -->
+            <button type="submit" name="update" class="update-button">Update</button>
         </form>
     </div>
 </body>

@@ -1,6 +1,7 @@
 <?php
 require '../config.php';
 
+
 // Periksa apakah ada ID proyek yang akan dihapus
 if (isset($_GET['id']) && !empty($_GET['id'])) {
     $project_id = $_GET['id'];
@@ -50,4 +51,8 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 } else {
     echo "<h2>ID proyek tidak ditemukan.</h2>";
 }
+
+?>
+
+<?php include '../components/back_button.php'; ?>
 

@@ -178,7 +178,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
     <?php include '../components/back_button.php'; ?>
 
     <a href="update.php?id=<?php echo $project['id']; ?>">
-        <button class="update-button"> Update</button>
+        <button class="update-button">Update</button>
+    </a>
+
     </a>
     <a href="delete.php?id=<?= $project['id'] ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus proyek ini?');">
         <button class="delete-button">Delete</button>
