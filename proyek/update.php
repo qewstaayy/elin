@@ -17,8 +17,8 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     exit();
 }
 // Menghitung kelompok SAT, BA, Serah Terima yang ada
-$existingGroups = 0;
-for ($i = 1; $i <= 10; $i++) {
+$existingGroups = 1;
+for ($i = 2; $i <= 10; $i++) {
     if (!empty($project["file_sat_$i"]) || !empty($project["file_ba_$i"]) || !empty($project["file_serah_terima_$i"])) {
         $existingGroups = $i;
     }
@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
     
 
     // Handle SAT, BA, and Serah Terima files up to a maximum of 10
-    for ($i = 1; $i <= 10; $i++) {
+    for ($i = 2; $i <= 10; $i++) {
         $file_sat = handleUpload("file_sat_$i", $upload_dir);
         $file_ba = handleUpload("file_ba_$i", $upload_dir);
         $file_serah_terima = handleUpload("file_serah_terima_$i", upload_dir: $upload_dir);
@@ -247,19 +247,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
             <?php endif; ?>
             <input type="file" name="file_invoice" accept="application/pdf">
 
-            <label>File SAT:</label>
+            <label>File SAT: </label>
             <?php if ($project['file_sat']): ?>
                 <a href="../uploads/projects/<?php echo rawurlencode($project['project_name']) . '/' . rawurlencode($project['file_sat']); ?>" target="_blank" class="view-button">View SAT</a>
             <?php endif; ?>
             <input type="file" name="file_sat" accept="application/pdf">
 
-            <label>File Berita Acara:</label>
+            <label>File Berita Acara: </label>
             <?php if ($project['file_ba']): ?>
                 <a href="../uploads/projects/<?php echo rawurlencode($project['project_name']) . '/' . rawurlencode($project['file_ba']); ?>" target="_blank" class="view-button">View Berita Acara</a>
             <?php endif; ?>
             <input type="file" name="file_ba" accept="application/pdf">
 
-            <label>File Serah Terima:</label>
+            <label>File Serah Terima: </label>
             <?php if ($project['file_serah_terima']): ?>
                 <a href="../uploads/projects/<?php echo rawurlencode($project['project_name']) . '/' . rawurlencode($project['file_serah_terima']); ?>" target="_blank" class="view-button">View Serah Terima</a>
             <?php endif; ?>

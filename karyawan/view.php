@@ -144,11 +144,11 @@ if (isset($_GET['id'])) {
 
         </div>
         <div class="foto">
-            <p><strong>KTP:</strong><br> <img src="../uploads/employees<?php echo $employee['ktp_photo']; ?>" width="300"></p>
+            <p><strong>KTP:</strong><br> <img src="../uploads/employees/<?php echo $employee['name'] . '/' . $employee['ktp_photo']; ?>" width="300">
             <hr>
-            <p><strong>KK:</strong><br> <img src="../uploads/employees<?php echo $employee['kk_photo']; ?>" width="300"></p>
+            <p><strong>KK:</strong><br> <img src="../uploads/employees/<?php echo $employee['name'] . '/' . $employee['kk_photo']; ?>" width="300">
             <hr>
-            <p><strong>Ijazah:</strong><br> <img src="../uploads/employees<?php echo $employee['ijazah_photo']; ?>" width="300"></p>
+            <p><strong>Ijazah:</strong><br> <img src="../uploads/employees/<?php echo $employee['name'] . '/' . $employee['ijazah_photo']; ?>" width="300">
         </div>
     </div>
 

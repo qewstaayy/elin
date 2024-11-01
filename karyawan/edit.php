@@ -317,24 +317,24 @@ if (isset($_GET['id'])) {
             <div class="part2"></div>
             <label>Foto KTP:</label><br>
             <?php if ($employee['ktp_photo']): ?>
-                <img src="../uploads/employees<?php echo $employee['ktp_photo']; ?>" alt="Foto KTP" width="100"><br>
+                <img src="../uploads/employees/<?php echo $employee['name'] . '/' . $employee['ktp_photo']; ?>" width="200"><br>
                 <input type="hidden" name="existing_ktp_photo" value="<?php echo $employee['ktp_photo']; ?>">
             <?php endif; ?>
-            <input type="file" name="ktp_photo" accept="image/*"><br><br>
+            <input type="file" name="ktp_photo" accept="image/*"><br>
             
             <label>Foto KK:</label><br>
             <?php if ($employee['kk_photo']): ?>
-                <img src="../uploads/employees<?php echo $employee['kk_photo']; ?>" alt="Foto KK" width="100"><br>
+                <img src="../uploads/employees/<?php echo $employee['name'] . '/' . $employee['kk_photo']; ?>" width="200"><br>
                 <input type="hidden" name="existing_kk_photo" value="<?php echo $employee['kk_photo']; ?>">
             <?php endif; ?>
-            <input type="file" name="kk_photo" accept="image/*"><br><br>
+            <input type="file" name="kk_photo" accept="image/*"><br>
             
             <label>Foto Ijazah:</label><br>
             <?php if ($employee['ijazah_photo']): ?>
-                <img src="../uploads/employees<?php echo $employee['ijazah_photo']; ?>" alt="Foto Ijazah" width="100"><br>
+                <img src="../uploads/employees/<?php echo $employee['name'] . '/' . $employee['ijazah_photo']; ?>" width="200"><br>
                 <input type="hidden" name="existing_ijazah_photo" value="<?php echo $employee['ijazah_photo']; ?>">
             <?php endif; ?>
-            <input type="file" name="ijazah_photo" accept="image/*"><br><br>
+            <input type="file" name="ijazah_photo" accept="image/*"><br>
 
            
 
