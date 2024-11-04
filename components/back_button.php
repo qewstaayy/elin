@@ -25,6 +25,7 @@
             font-size: 16px; 
             font-weight: bold; 
             transition: background-color 0.3s; 
+            cursor: pointer;
         }
 
         .back-button:hover {
@@ -32,11 +33,16 @@
             color: #000;
         }
     </style>
-
 </head>
 <body>
-<a href="/elin" class="back-button">
+    <div onclick="goBack()" class="back-button">
         <span class="arrow">&larr;</span> Back
-    </a>
+    </div>
+
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
 </body>
 </html>
