@@ -31,8 +31,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
     $start_date = $_POST['start_date'];
     $end_date = $_POST['end_date'];
 
-    // Set upload directory
-    $upload_dir = "../uploads/projects/" . rawurlencode($project_name) . "/";
+    $project_name = $project['project_name'];
+    $clean_project_name = preg_replace('/[^a-zA-Z0-9_\-]/', '_', strtolower($project_name));
+
+    // Menentukan direktori upload dengan nama proyek yang telah dibersihkan
+    $upload_dir = "../uploads/projects/$clean_project_name/";
     if (!is_dir($upload_dir)) mkdir($upload_dir, 0777, true);
 
    // Function to handle file upload

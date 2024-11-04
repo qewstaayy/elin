@@ -1,7 +1,6 @@
 <?php
 require '../config.php';
 
-
 // Periksa apakah ada ID proyek yang akan dihapus
 if (isset($_GET['id']) && !empty($_GET['id'])) {
     $project_id = $_GET['id'];
@@ -12,47 +11,37 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     $project = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($project) {
-        // Hapus file yang terkait dengan proyek jika ada
-        $upload_dir = "../uploads/projects/" . rawurlencode($project['project_name']) . "/";
+        // Tentukan direktori proyek berdasarkan nama proyek
+        $clean_project_name = preg_replace('/[^a-zA-Z0-9_\-]/', '_', strtolower($project['project_name']));
+        $upload_dir = "../uploads/projects/" . $clean_project_name . "/";
 
-        $files_to_delete = [
-            'file_po', 'file_daily_report', 'file_k3', 'file_invoice',
-            'file_sat', 'file_ba', 'file_serah_terima'
-        ];
-
-        // Hapus file SAT, BA, dan Serah Terima tambahan (maksimal 10)
-        for ($i = 1; $i <= 10; $i++) {
-            $files_to_delete[] = "file_sat_$i";
-            $files_to_delete[] = "file_ba_$i";
-            $files_to_delete[] = "file_serah_terima_$i";
-        }
-
-        // Loop untuk menghapus file
-        foreach ($files_to_delete as $file_column) {
-            if (!empty($project[$file_column]) && file_exists($upload_dir . $project[$file_column])) {
-                unlink($upload_dir . $project[$file_column]);
+        // Fungsi rekursif untuk menghapus folder dan semua isinya
+        function deleteDirectory($dir) {
+            if (!is_dir($dir)) return;
+            $files = scandir($dir);
+            foreach ($files as $file) {
+                if ($file === '.' || $file === '..') continue;
+                $filePath = $dir . '/' . $file;
+                is_dir($filePath) ? deleteDirectory($filePath) : unlink($filePath);
             }
+            rmdir($dir);
         }
 
-        // Hapus folder proyek jika kosong
-        if (is_dir($upload_dir) && count(glob("$upload_dir/*")) === 0) {
-            rmdir($upload_dir);
-        }
+        // Panggil fungsi untuk menghapus folder proyek dan isinya
+        deleteDirectory($upload_dir);
 
         // Hapus data proyek dari database
         $stmt = $pdo->prepare("DELETE FROM projects WHERE id = ?");
         $stmt->execute([$project_id]);
 
-        // Redirect setelah penghapusan berhasil
-        echo "<h2>Project berhasil dihapus.</h2>";
+        // Pesan setelah penghapusan berhasil
+        echo "<h2>Proyek berhasil dihapus, termasuk semua file terkait.</h2>";
     } else {
-        echo "<h2>Project tidak ditemukan.</h2>";
+        echo "<h2>Proyek tidak ditemukan.</h2>";
     }
 } else {
     echo "<h2>ID proyek tidak ditemukan.</h2>";
 }
-
 ?>
 
 <?php include '../components/back_button.php'; ?>
-
