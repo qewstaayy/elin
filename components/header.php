@@ -9,6 +9,18 @@
     <link href="https://fonts.googleapis.com/css2?family=MuseoModerno:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
+    <script>
+        document.querySelector('.navlink li').addEventListener('mouseover', function() {
+        document.querySelector('.dropdown').style.display = 'block';
+        document.querySelector('.dropdown').style.zIndex = '10'; // Pastikan lebih tinggi dari tombol delete
+        });
+
+        document.querySelector('.navlink li').addEventListener('mouseleave', function() {
+        document.querySelector('.dropdown').style.display = 'none';
+        });
+
+    </script>
+
     <style>
         body{
             font-family: 'Poppins';
@@ -16,7 +28,8 @@
             padding: 0;
         }
 
-        nav{
+        nav {
+            z-index: 1; /* Pastikan nilai lebih rendah dari z-index dropdown */
             padding: 0 15px;
             top: 0;
             position: sticky;
@@ -58,21 +71,23 @@
             font-weight: bold;
         }
 
-        ul li ul.dropdown{
-            width: 81%;
+        ul li ul.dropdown {
+            width: 80%;
             background: #153448;
             position: absolute;
-            z-index: 999;
+            z-index: 9999;
             display: none;
+            top: 50px; /* Pastikan menggunakan satuan px */
+            left: 0;
+            overflow: visible; /* Memastikan dropdown tidak terpotong */
         }
-
         ul li a:hover{
             text-decoration: underline;
             color: #A18849;
         }
 
         .dropdown li{
-            display: block;
+            display: block; 
         }
 
         .dropdown li a{

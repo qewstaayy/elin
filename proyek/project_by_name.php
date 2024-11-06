@@ -96,6 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
             padding: 2rem;
             border-radius: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
 
         .grid {
@@ -132,17 +133,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
 
         .update-button {
             position: absolute; /* Atau gunakan 'fixed' jika ingin tombol tetap di tempat saat scroll */
-            top: 1rem; /* Jarak dari atas */
-            right: 1rem; /* Jarak dari kanan */
+            top: 190px; /* Jarak dari atas */
+            right: 13rem; /* Jarak dari kanan */
             background-color: #153448;
             color: #DFD0B8;
             border: none;
-            padding: 0.8rem 1.2rem;
-            margin-top: 100px;
+            padding: 1rem 2.5rem;
             border-radius: 8px;
             cursor: pointer;
             transition: 0.3s;
-            font-size: 16.5px;
+            font-size: 18.5px;
             font-family: 'Poppins';
         }
 
@@ -152,20 +152,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
         }
 
         .delete-button {
-            position: absolute; /* Atau gunakan 'fixed' jika ingin tombol tetap di tempat saat scroll */
-            top: 1rem; /* Jarak dari atas */
-            right: 9rem; /* Jarak dari kanan */
+            position: absolute;
+            top: 190px;
+            right: 2rem;
             background-color: #153448;
             color: #DFD0B8;
             border: none;
-            padding: 0.8rem 1.2rem;
-            margin-top: 100px;
+            padding: 1rem 2.5rem;
             border-radius: 8px;
             cursor: pointer;
             transition: 0.3s;
-            font-size: 16.5px;
+            font-size: 18.5px;
             font-family: 'Poppins';
         }
+
 
         .delete-button:hover {
             background-color: #3C5B6F;
@@ -176,12 +176,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
 <body>
     <?php include '../components/header.php'; ?>
     <?php include '../components/back_button.php'; ?>
-
+    
     <a href="update.php?id=<?php echo $project['id']; ?>">
         <button class="update-button">Update</button>
     </a>
 
-    </a>
     <a href="delete.php?id=<?= $project['id'] ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus proyek ini?');">
         <button class="delete-button">Delete</button>
     </a>

@@ -16,6 +16,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     echo "<p style='color: red;'>ID proyek tidak ditemukan. Pastikan URL memiliki parameter ID yang benar.</p>";
     exit();
 }
+
 // Menghitung kelompok SAT, BA, Serah Terima yang ada
 $existingGroups = 1;
 for ($i = 2; $i <= 10; $i++) {
@@ -31,14 +32,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
     $start_date = $_POST['start_date'];
     $end_date = $_POST['end_date'];
 
-    $project_name = $project['project_name'];
     $clean_project_name = preg_replace('/[^a-zA-Z0-9_\-]/', '_', strtolower($project_name));
 
     // Menentukan direktori upload dengan nama proyek yang telah dibersihkan
     $upload_dir = "../uploads/projects/$clean_project_name/";
     if (!is_dir($upload_dir)) mkdir($upload_dir, 0777, true);
 
-   // Function to handle file upload
+    // Function to handle file upload
     function handleUpload($field, $upload_dir) {
         if (isset($_FILES[$field]) && $_FILES[$field]['error'] === UPLOAD_ERR_OK) {
             // Ensure upload directory exists
@@ -76,12 +76,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$project_name, $start_date, $end_date, $file_po, $file_daily_report, $file_k3, $file_invoice, $file_sat, $file_ba, $file_serah_terima, $project_id]);
     
-
     // Handle SAT, BA, and Serah Terima files up to a maximum of 10
     for ($i = 2; $i <= 10; $i++) {
         $file_sat = handleUpload("file_sat_$i", $upload_dir);
         $file_ba = handleUpload("file_ba_$i", $upload_dir);
-        $file_serah_terima = handleUpload("file_serah_terima_$i", upload_dir: $upload_dir);
+        $file_serah_terima = handleUpload("file_serah_terima_$i", $upload_dir);
 
         // Only update the database if files were uploaded or existed previously
         if ($file_sat || $file_ba || $file_serah_terima) {
@@ -96,6 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
     exit();
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -225,43 +225,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
             <!-- File Fields -->
             <label>File PO:</label>
             <?php if ($project['file_po']): ?>
-                <a href="<?php echo str_replace('%20', '_', "../uploads/projects/" . rawurlencode($project['project_name']) . '/' . rawurlencode($project['file_po'])); ?>" target="_blank" class="view-button">View PO</a>
+                <a href="<?php echo "../uploads/projects/" . str_replace(' ', '_', $project['project_name']) . '/' . rawurlencode($project['file_po']); ?>" target="_blank" class="view-button">View PO</a>            
             <?php endif; ?>
             <input type="file" name="file_po" accept="application/pdf">
 
             <label>File K3:</label>
             <?php if ($project['file_k3']): ?>
-                <a href="<?php echo str_replace('%20', '_', "../uploads/projects/" . rawurlencode($project['project_name']) . '/' . rawurlencode($project['file_k3'])); ?>" target="_blank" class="view-button">View K3</a>
+                <a href="<?php echo "../uploads/projects/" . str_replace(' ', '_', $project['project_name']) . '/' . rawurlencode($project['file_k3']); ?>" target="_blank" class="view-button">View K3</a>
             <?php endif; ?>
             <input type="file" name="file_k3" accept="application/pdf">
 
             <label>File Daily Report:</label>
             <?php if ($project['file_daily_report']): ?>
-                <a href="<?php echo str_replace('%20', '_', "../uploads/projects/" . rawurlencode($project['project_name']) . '/' . rawurlencode($project['file_daily_report'])); ?>" target="_blank" class="view-button">View Daily Report</a>
+                <a href="<?php echo "../uploads/projects/" . str_replace(' ', '_', $project['project_name']) . '/' . rawurlencode($project['file_daily_report']); ?>" target="_blank" class="view-button">View Daily Report</a>
             <?php endif; ?>
             <input type="file" name="file_daily_report" accept="application/pdf">
 
             <label>File Invoice:</label>
             <?php if ($project['file_invoice']): ?>
-                <a href="<?php echo str_replace('%20', '_', "../uploads/projects/" . rawurlencode($project['project_name']) . '/' . rawurlencode($project['file_invoice'])); ?>" target="_blank" class="view-button">View Invoice</a>
+                <a href="<?php echo "../uploads/projects/" . str_replace(' ', '_', $project['project_name']) . '/' . rawurlencode($project['file_invoice']); ?>" target="_blank" class="view-button">View Invoice</a>
             <?php endif; ?>
             <input type="file" name="file_invoice" accept="application/pdf">
 
             <label>File SAT: </label>
             <?php if ($project['file_sat']): ?>
-                <a href="<?php echo str_replace('%20', '_', "../uploads/projects/" . rawurlencode($project['project_name']) . '/' . rawurlencode($project['file_sat'])); ?>" target="_blank" class="view-button">View SAT</a>
+                <a href="<?php echo "../uploads/projects/" . str_replace(' ', '_', $project['project_name']) . '/' . rawurlencode($project['file_sat']); ?>" target="_blank" class="view-button">View SAT</a>
             <?php endif; ?>
             <input type="file" name="file_sat" accept="application/pdf">
 
             <label>File Berita Acara: </label>
             <?php if ($project['file_ba']): ?>
-                <a href="<?php echo str_replace('%20', '_', "../uploads/projects/" . rawurlencode($project['project_name']) . '/' . rawurlencode($project['file_ba'])); ?>" target="_blank" class="view-button">View Berita Acara</a>
+                <a href="<?php echo "../uploads/projects/" . str_replace(' ', '_', $project['project_name']) . '/' . rawurlencode($project['file_ba']); ?>" target="_blank" class="view-button">View Berita Cerita</a>
             <?php endif; ?>
             <input type="file" name="file_ba" accept="application/pdf">
 
             <label>File Serah Terima: </label>
             <?php if ($project['file_serah_terima']): ?>
-                <a href="<?php echo str_replace('%20', '_', "../uploads/projects/" . rawurlencode($project['project_name']) . '/' . rawurlencode($project['file_serah_terima'])); ?>" target="_blank" class="view-button">View Serah Terima</a>
+                <a href="<?php echo "../uploads/projects/" . str_replace(' ', '_', $project['project_name']) . '/' . rawurlencode($project['file_serah_terima']); ?>" target="_blank" class="view-button">View Serah Terima</a>
             <?php endif; ?>
             <input type="file" name="file_serah_terima" accept="application/pdf">
 
@@ -271,20 +271,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update'])) {
                     <div class="field-group">
                         <label>SAT <?php echo $i; ?>:</label>
                         <?php if ($project["file_sat_$i"]): ?>
-                            <a href="<?php echo str_replace('%20', '_', "../uploads/projects/" . rawurlencode($project['project_name']) . '/' . rawurldecode(string: $project["file_sat_$i"])); ?> " target="_blank" class="view-button">View SAT <?php echo $i; ?></a>
+                            <a href="<?php echo "../uploads/projects/" . str_replace(' ', '_', $project['project_name']) . '/' . rawurldecode(string: $project["file_sat_$i"]); ?>" target="_blank" class="view-button">View SAT <?php echo $i; ?></a>
                         <?php endif; ?>
                         <input type="file" name="file_sat_<?php echo $i; ?>" accept="application/pdf">
 
                         <label>BA <?php echo $i; ?>:</label>
                         <?php if ($project["file_ba_$i"]): ?>
-                            <a href="<?php echo str_replace('%20', '_', "../uploads/projects/" . rawurlencode($project['project_name']) . '/' . rawurldecode(string: $project["file_ba_$i"])); ?> " target="_blank" class="view-button">View Berita Acara <?php echo $i; ?></a>
-                        <?php endif; ?>
+                            <a href="<?php echo "../uploads/projects/" . str_replace(' ', '_', $project['project_name']) . '/' . rawurldecode(string: $project["file_ba_$i"]); ?>" target="_blank" class="view-button">View Berita Acara <?php echo $i; ?></a>                        <?php endif; ?>
                         <input type="file" name="file_ba_<?php echo $i; ?>" accept="application/pdf">
 
                         <label>Serah Terima <?php echo $i; ?>:</label>
                         <?php if ($project["file_serah_terima_$i"]): ?>
-                            <a href="<?php echo str_replace('%20', '_', "../uploads/projects/" . rawurlencode($project['project_name']) . '/' . rawurldecode(string: $project["file_serah_terima_$i"])); ?> " target="_blank" class="view-button">View Serah Terima <?php echo $i; ?></a>
-                        <?php endif; ?>
+                            <a href="<?php echo "../uploads/projects/" . str_replace(' ', '_', $project['project_name']) . '/' . rawurldecode(string: $project["file_serah_terima_$i"]); ?>" target="_blank" class="view-button">View Serah Terima <?php echo $i; ?></a>                        <?php endif; ?>
                         <input type="file" name="file_serah_terima_<?php echo $i; ?>" accept="application/pdf">
                     </div>
                 <?php endfor; ?>
