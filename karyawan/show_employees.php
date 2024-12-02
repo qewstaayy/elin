@@ -102,6 +102,8 @@ $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 </head>
 <body>
+
+<?php include '../components/header.php'; ?>
     
     <?php if (isset($_GET['success'])): ?>
         <div style="color: green;">Data berhasil disimpan!</div>

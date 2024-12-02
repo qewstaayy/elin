@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     move_uploaded_file($_FILES['ijazah_photo']['tmp_name'], $ijazah_target);
 
     // Simpan data ke database
-    $sql = "INSERT INTO employees (name, email, no_hp, alamat, tgl_masuk, nama_bank, no_rek, no_bpjs, gender, uk_baju, uk_celana, uk_sepatu, kk_photo, ktp_photo, ijazah_photo)
+    $sql = "INSERT INTO employees (name, email, no_hp, alamat, tgl_masuk, nama_bank, no_rek, no_bpjs, gender, uk_baju, uk_celana, uk_sepatu, ktp_photo, kk_photo, ijazah_photo)
             VALUES (:name, :email, :no_hp, :alamat, :tgl_masuk, :nama_bank, :no_rek, :no_bpjs, :gender, :uk_baju, :uk_celana, :uk_sepatu, :ktp_photo, :kk_photo, :ijazah_photo)";
 
     $stmt = $pdo->prepare($sql);

@@ -3,7 +3,21 @@ require '../config.php';
 
 if (isset($_POST['update'])) {
     $id = $_POST['id'];
-    $name = $_POST['name'];
+    $old_name = $_POST['old_name']; // Nama lama
+    $name = $_POST['name']; // Nama baru
+
+    // Direktori lama dan baru
+    $old_dir = "../uploads/employees/" . str_replace(' ', '_', $old_name);
+    $new_dir = "../uploads/employees/" . str_replace(' ', '_', $name);
+
+    // Pindahkan folder jika nama diubah
+    if ($old_name !== $name && file_exists($old_dir)) {
+        if (!rename($old_dir, $new_dir)) {
+            echo "Gagal mengganti nama folder. Pastikan izin direktori sudah sesuai.";
+            exit;
+        }
+    }
+
     $email = $_POST['email'];
     $no_hp = $_POST['no_hp'];
     $alamat = $_POST['alamat'];
@@ -20,25 +34,25 @@ if (isset($_POST['update'])) {
     $kk_photo = !empty($_FILES['kk_photo']['name']) ? $_FILES['kk_photo']['name'] : $_POST['existing_kk_photo'];
     $ijazah_photo = !empty($_FILES['ijazah_photo']['name']) ? $_FILES['ijazah_photo']['name'] : $_POST['existing_ijazah_photo'];
 
-    $upload_dir = "../uploads/employees";
+      $upload_dir = $new_dir; // Gunakan folder baru jika nama berubah
 
-    // Upload files if new files are provided
+    // Upload file baru (sesuai logika Anda sebelumnya)
     if (!empty($_FILES['ktp_photo']['name'])) {
-        if (move_uploaded_file($_FILES['ktp_photo']['tmp_name'], $upload_dir . $_FILES['ktp_photo']['name'])) {
+        if (move_uploaded_file($_FILES['ktp_photo']['tmp_name'], $upload_dir . '/' . $_FILES['ktp_photo']['name'])) {
             $ktp_photo = $_FILES['ktp_photo']['name'];
         } else {
             echo "Error uploading KTP photo.";
         }
     }
     if (!empty($_FILES['kk_photo']['name'])) {
-        if (move_uploaded_file($_FILES['kk_photo']['tmp_name'], $upload_dir . $_FILES['kk_photo']['name'])) {
+        if (move_uploaded_file($_FILES['kk_photo']['tmp_name'], $upload_dir . '/' . $_FILES['kk_photo']['name'])) {
             $kk_photo = $_FILES['kk_photo']['name'];
         } else {
             echo "Error uploading KK photo.";
         }
     }
     if (!empty($_FILES['ijazah_photo']['name'])) {
-        if (move_uploaded_file($_FILES['ijazah_photo']['tmp_name'], $upload_dir . $_FILES['ijazah_photo']['name'])) {
+        if (move_uploaded_file($_FILES['ijazah_photo']['tmp_name'], $upload_dir . '/' . $_FILES['ijazah_photo']['name'])) {
             $ijazah_photo = $_FILES['ijazah_photo']['name'];
         } else {
             echo "Error uploading Ijazah photo.";
@@ -49,7 +63,7 @@ if (isset($_POST['update'])) {
     $stmt = $pdo->prepare($sql);
     if ($stmt->execute([$name, $email, $no_hp, $alamat, $tgl_masuk, $nama_bank, $no_rek, $no_bpjs, $uk_baju, $uk_celana, $uk_sepatu, $ktp_photo, $kk_photo, $ijazah_photo, $id])) {
         header("Location: show_employees.php?success=1");
-    } else { 
+    } else {
         echo "Error updating record: " . print_r($stmt->errorInfo(), true);
     }
 }
@@ -273,10 +287,17 @@ if (isset($_GET['id'])) {
     </style>
 </head>
 <body>
+
+<?php 
+    include '../components/back_button.php'
+?>
+
     <h1>Edit Karyawan</h1>
 
     <form action="" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="id" value="<?php echo $employee['id']; ?>">
+        <<input type="hidden" name="id" value="<?php echo $employee['id']; ?>">
+        <input type="hidden" name="old_name" value="<?php echo $employee['name']; ?>">
+
         <div class="part1">
             <label>Nama:</label> <input type="text" name="name" value="<?php echo $employee['name']; ?>"><br>
             <div class="contact">
@@ -317,21 +338,21 @@ if (isset($_GET['id'])) {
             <div class="part2"></div>
             <label>Foto KTP:</label><br>
             <?php if ($employee['ktp_photo']): ?>
-                <img src="../uploads/employees/<?php echo $employee['name'] . '/' . $employee['ktp_photo']; ?>" width="200"><br>
+                <img src="../uploads/employees/<?php echo str_replace(' ', '_', $employee['name']) . '/' . $employee['ktp_photo']; ?>" width="300"><br>
                 <input type="hidden" name="existing_ktp_photo" value="<?php echo $employee['ktp_photo']; ?>">
             <?php endif; ?>
             <input type="file" name="ktp_photo" accept="image/*"><br>
             
             <label>Foto KK:</label><br>
             <?php if ($employee['kk_photo']): ?>
-                <img src="../uploads/employees/<?php echo $employee['name'] . '/' . $employee['kk_photo']; ?>" width="200"><br>
+                <img src="../uploads/employees/<?php echo str_replace(' ', '_', $employee['name']) . '/' . $employee['kk_photo']; ?>" width="300"><br>
                 <input type="hidden" name="existing_kk_photo" value="<?php echo $employee['kk_photo']; ?>">
             <?php endif; ?>
             <input type="file" name="kk_photo" accept="image/*"><br>
             
             <label>Foto Ijazah:</label><br>
             <?php if ($employee['ijazah_photo']): ?>
-                <img src="../uploads/employees/<?php echo $employee['name'] . '/' . $employee['ijazah_photo']; ?>" width="200"><br>
+                <img src="../uploads/employees/<?php echo str_replace(' ', '_', $employee['name']) . '/' . $employee['ijazah_photo']; ?>" width="300"><br>
                 <input type="hidden" name="existing_ijazah_photo" value="<?php echo $employee['ijazah_photo']; ?>">
             <?php endif; ?>
             <input type="file" name="ijazah_photo" accept="image/*"><br>
