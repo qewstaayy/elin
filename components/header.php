@@ -47,6 +47,19 @@
             color: #DFD0B8;
             font-family: 'MuseoModerno';
             font-size: 20px;
+        }   
+
+        .logout{
+            
+            text-decoration: none;
+            color: #DFD0B8;
+            font-family: 'Poppins';
+            font-size: 20px;
+        }
+
+        .logout:hover{
+            color: #A18849;
+            font-weight: bold;
         }
 
         .navlink{
@@ -105,7 +118,7 @@
 <body>
     <nav>
         <div class="navbar">
-            <a href="/elin" class="logo"><h2>Pandawa</h2></a>
+            <a class="logo"><h2>Pandawa</h2></a>
             <ul class="navlink">
                 <li><a href="<?= $base_url ?>/">Home</a></li>
                 <li>
@@ -123,6 +136,7 @@
                     </ul>
                 </li>
             </ul>
+            <a href="logout.php" class="logout">Logout</a>
         </div>
     </nav>
 </body>
