@@ -45,12 +45,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <title>Login</title>
 </head>
 <style> 
     body {
-        font-family: 'Poppins', sans-serif;
-        background-color: #f7f7f7;
+        font-family: 'Poppins';
+        background-color: #fff;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -58,16 +59,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         margin: 0;
     }
     .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         text-align: center;
+        
+    }
+    .container img {
+        width: 150px;
+    }
+    form{
         background-color: #fff;
-        padding: 40px 65px;
+        padding: 40px 55px;
         border-radius: 15px;
         box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
     }
-    .container img {
-        width: 80px;
+    form label{
+        display: block;
+        text-align: left;
     }
-
+    form input{
+        width: 280px;
+        justify-content: center;
+        padding: 10px ;
+        border: 2px solid #000;
+        border-radius: 7px;
+    }
     .btn-login  {
         display: inline-block;
         width: 100%;
@@ -78,27 +95,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         border: none;
         border-radius: 5px;
         cursor: pointer;
-        font-weight: bold;
+        margin-top: 20px;
     }
     .btn-login:hover {
-        background-color: #3C5B6F;
+        background-color: #1A3D54;
+        color: #A18849;
+        font-weight: 700;
+    }
+
+    @media (max-width: 768px) {
+
     }
 </style>
 
 <body>
-    <h2>Login</h2>
-    <?php if (isset($error)): ?>
-        <p style="color: red;"><?php echo htmlspecialchars($error); ?></p>
-    <?php endif; ?>
     <div class="container">
-        <form method="POST" action="admin.php">    
-            <label>Username:</label> <br><br>
+        <img src="asset/logo.jpeg" alt="logo" class="logo"><br>
+
+        <form method="POST" action="">    
+        <?php if (isset($error)): ?>
+            <p style="color: red;"><?php echo htmlspecialchars($error); ?></p>
+        <?php endif; ?>
+        
+            <label>Username:</label>
             <input type="text" name="username" required><br><br>
 
             <label>Password:</label>
             <input type="password" name="password" required><br><br>
 
-            <button type="submit" class="btn-login">Login</button>
+            <button type="submit" class="btn-login">LOG IN</button>
         </form>
     </div>
 </body>
