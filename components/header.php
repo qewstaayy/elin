@@ -118,18 +118,18 @@
 <body>
     <nav>
         <div class="navbar">
-            <a class="logo"><h2>Pandawa</h2></a>
+            <a class="logo" href="<?= $base_url ?>/admin.php"><h2>Pandawa</h2></a>
             <ul class="navlink">
-                <li><a href="<?= $base_url ?>/">Home</a></li>
+                <li><a href="<?= $base_url ?>/admin.php">Home</a></li>
                 <li>
-                    <a href="<?= $base_url ?>/">Data Karyawan ▼ </a>
+                    <a href="<?= $base_url ?>/admin.php">Data Karyawan ▼ </a>
                     <ul class="dropdown">
                         <li><a href="<?= $base_url ?>/karyawan/form_employee.php">Form Karyawan</a></li>
                         <li><a href="<?= $base_url ?>/karyawan/show_employees.php">Data Karyawan</a></li>
                     </ul>
                 </li>
                 <li>
-                    <a href="<?= $base_url ?>/">Data Project ▼</a>
+                    <a href="<?= $base_url ?>/admin.php">Data Project ▼</a>
                     <ul class="dropdown">
                         <li><a href="<?= $base_url ?>/proyek/form_project.php">Form Project</a></li>
                         <li><a href="<?= $base_url ?>/proyek/show_projects.php">Data Project</a></li>

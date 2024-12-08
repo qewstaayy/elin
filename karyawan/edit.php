@@ -90,6 +90,29 @@ if (isset($_GET['id'])) {
         font-family: 'Poppins';
         }
 
+        .back-button {
+            display: inline-flex; 
+            align-items: center; 
+            background-color: #3C5B6F;
+            padding: 10px 16px; 
+            margin: 15px;
+            border-radius: 5px; 
+            font-size: 16px; 
+            font-weight: bold; 
+            transition: background-color 0.3s; 
+            cursor: pointer;
+        }
+
+        .back-button a{
+            color: #DFD0B8;
+            text-decoration: none;
+        }
+
+        .back-button:hover {
+            background-color: red; 
+            color: #000;
+        }
+
         h1 {
             text-align: center;
             color: #000;
@@ -288,9 +311,9 @@ if (isset($_GET['id'])) {
 </head>
 <body>
 
-<?php 
-    include '../components/back_button.php'
-?>
+    <div class="back-button">
+        <a href="../karyawan/show_employees.php"><span class="arrow">&larr;</span> Back</a>
+    </div>
 
     <h1>Edit Karyawan</h1>
 

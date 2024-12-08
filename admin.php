@@ -1,17 +1,4 @@
-<?php
-session_start();
-require 'config.php';
 
-// Cek apakah pengguna sudah login dan memiliki role admin
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-    header("Location: index.php");
-    exit;
-}
-
-// Fetch data pengguna dari database
-$stmt = $pdo->query("SELECT id, username, role FROM users");
-$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +11,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
     <?php require 'components/header.php'; ?>
-
+    <?php $base_url = '/elin'; ?>
     
     <h2>Selamat datang, Admin!</h2>
   
@@ -33,14 +20,15 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <br><br>
 
     <div class="btn">
-        <a href="/karyawan/form_employee.php" class="btn-form">Tambah Karyawan</a>
-        <a href="/proyek/form_project.php" class="btn-form">Tambah Project</a>
+        <a href="<?= $base_url ?>/karyawan/form_employee.php" class="btn-form">Tambah Karyawan</a>
+        <a href="<?= $base_url ?>/proyek/form_project.php" class="btn-form">Tambah Project</a>
     </div>
 </body>
 <style>
     body {
         font-family: 'Poppins';
         background-image: url('asset/bg.png');
+        background-size: 2000px;
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
@@ -96,6 +84,33 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     .btn-form:hover {
         background-color: #3C5B6F;
         font-weight: bold;
+    }
+
+    @media (max-width: 768px) {
+        body{
+            background-size: 1000px;
+        }
+
+        h1 {
+            font-size: 30px;
+            margin-top: 50px;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-top: 20%;
+        }
+
+        p {
+            padding: 0px 20px;
+            font-size: 16px;
+        }
+
+        .btn-form {
+            padding: 15px 30px;
+            font-size: 14px;
+            margin: 10px 0px;
+        }
     }
 </style>
 </html>

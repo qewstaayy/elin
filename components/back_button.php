@@ -35,14 +35,29 @@
     </style>
 </head>
 <body>
-    <div onclick="goBack()" class="back-button">
+<?php $base_url = '/elin'; ?>
+
+    <div onclick="customBack()" class="back-button">
         <span class="arrow">&larr;</span> Back
     </div>
 
     <script>
-        function goBack() {
-            window.history.back();
+        function customBack() {
+            const hierarchy = JSON.parse(localStorage.getItem('hierarchy')) || [];
+            hierarchy.pop(); // Hapus halaman saat ini
+            const previousPage = hierarchy.pop(); // Ambil halaman sebelumnya
+            
+            if (previousPage) {
+                // Arahkan ke halaman sebelumnya
+                localStorage.setItem('hierarchy', JSON.stringify(hierarchy));
+                window.location.href = previousPage;
+            } else {
+                // Jika tidak ada halaman sebelumnya, fallback
+                window.location.href = '/semuaproyek.php';
+            }
         }
     </script>
+
+
 </body>
 </html>

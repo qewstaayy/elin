@@ -47,9 +47,10 @@
     </script>
 </head>
 <body>
-    <a href="/elin" class="back-button">
-        <span class="arrow">&larr;</span> Back
-    </a>
+
+    <div class="back-button">
+        <a href="../admin.php"><span class="arrow">&larr;</span> Back</a>
+    </div>
 
     <h1>Form Tambah Proyek</h1>
     <form action="../proyek/add_project.php" method="POST" enctype="multipart/form-data">
@@ -113,23 +114,23 @@
         display: inline-flex; 
         align-items: center; 
         background-color: #3C5B6F;
-        color: #DFD0B8;
-        padding: 10px 18px; 
-        margin: 10px;
-        border-radius: 10px; 
-        text-decoration: none;
+        padding: 10px 16px; 
+        margin: 15px;
+        border-radius: 5px; 
         font-size: 16px; 
         font-weight: bold; 
         transition: background-color 0.3s; 
-    }
-    .back-button:hover {
-         background-color: red; 
-         color: #000;
+        cursor: pointer;
     }
 
-    .arrow {
-        font-size: 20px; /* Ukuran panah */
-        margin-right: 5px;
+    .back-button a{
+        color: #DFD0B8;
+        text-decoration: none;
+    }
+
+    .back-button:hover {
+        background-color: red; 
+        color: #000;
     }
 
     h1 {

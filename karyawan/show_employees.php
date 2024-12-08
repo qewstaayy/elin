@@ -154,7 +154,5 @@ $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <button class="download-btn">Download</button>
     <script src="main.js"></script>
 
-    <?php require '../components/back_button.php'; ?>
-
 </body>
 </html>

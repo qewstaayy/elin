@@ -11,9 +11,27 @@
             font-family: 'Poppins';
         }
 
-        .arrow {
-            font-size: 20px; /* Ukuran panah */
-            margin-right: 8px;
+        .back-button {
+            display: inline-flex; 
+            align-items: center; 
+            background-color: #3C5B6F;
+            padding: 10px 16px; 
+            margin: 15px;
+            border-radius: 5px; 
+            font-size: 16px; 
+            font-weight: bold; 
+            transition: background-color 0.3s; 
+            cursor: pointer;
+        }
+
+        .back-button a{
+            color: #DFD0B8;
+            text-decoration: none;
+        }
+
+        .back-button:hover {
+            background-color: red; 
+            color: #000;
         }
 
         h1 {
@@ -229,10 +247,11 @@
 </head>
 <body>
 
-<?php 
-    include '../config.php';
-    include '../components/back_button.php'
-?>
+<?php include '../config.php'; ?>
+
+    <div class="back-button">
+        <a href="../admin.php"><span class="arrow">&larr;</span> Back</a>
+    </div>
 
     <h1>Form Tambah Karyawan</h1>
     <form action="add_employee.php" method="POST" enctype="multipart/form-data">

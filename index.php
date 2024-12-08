@@ -104,7 +104,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     @media (max-width: 768px) {
-
+        .container{
+            width: 100px;
+        }
+        form {
+            width: 200px;
+            padding: 30px 20px;
+        }
+        form label{
+            font-size: 12px;
+        }
+        form input {
+            width: 170px; 
+        }
+        .container img {
+            width: 100px; 
+            margin-bottom: 15px;
+        }
+        .btn-login{
+            padding: 10px;
+            font-size: 12px;
+        }
     }
 </style>
 
@@ -116,7 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php if (isset($error)): ?>
             <p style="color: red;"><?php echo htmlspecialchars($error); ?></p>
         <?php endif; ?>
-        
+
             <label>Username:</label>
             <input type="text" name="username" required><br><br>
 

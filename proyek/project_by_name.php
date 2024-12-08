@@ -11,6 +11,8 @@ if (isset($_GET['name']) && !empty($_GET['name'])) {
 
     if ($project) {
         $title = htmlspecialchars($project['project_name']);
+        $year = date('Y', strtotime($project['start_date'])); // Ambil tahun dari start_date
+
 
         function getFilePath($project_name, $file) {
             return !empty($file) ? '../uploads/projects/' . rawurlencode(str_replace(' ', '_', $project_name)) . '/' . rawurlencode($file) : null;
@@ -79,6 +81,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
             background-color: white;
             margin: 0;
             padding: 0;
+        }
+
+        .back-button {
+            display: inline-flex; 
+            align-items: center; 
+            background-color: #3C5B6F;
+            padding: 10px 16px; 
+            margin: 15px;
+            border-radius: 5px; 
+            font-size: 16px; 
+            font-weight: bold; 
+            transition: background-color 0.3s; 
+            cursor: pointer;
+        }
+
+        .back-button a{
+            color: #DFD0B8;
+            text-decoration: none;
+        }
+
+        .back-button:hover {
+            background-color: red; 
+            color: #000;
         }
 
         h1 {
@@ -174,8 +199,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
     </style>
 </head>
 <body>
-    <?php include '../components/header.php'; ?>
-    <?php include '../components/back_button.php'; ?>
+<?php include '../components/header.php'; ?>
+
+    <div class="back-button">
+        <a href="../proyek/projects_by_year.php?year=<?= $year ?>"><span class="arrow">&larr;</span> Back</a>
+    </div>  
     
     <a href="update.php?id=<?php echo $project['id']; ?>">
         <button class="update-button">Update</button>
