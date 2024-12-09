@@ -1,4 +1,17 @@
+<?php
+session_start();
+require 'config.php';
 
+// Cek apakah pengguna sudah login dan memiliki role admin
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+    header("Location: index.php");
+    exit;
+}
+
+// Fetch data pengguna dari database
+$stmt = $pdo->query("SELECT id, username, role FROM users");
+$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
 
 <!DOCTYPE html>
 <html lang="en">
