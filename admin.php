@@ -26,7 +26,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php require 'components/header.php'; ?>
     <?php $base_url = '/elin'; ?>
     
-    <h2>Selamat datang, Admin!</h2>
+    <h1>Selamat datang, Admin!</h1>
   
     
     <p>Program ini berfungsi untuk menambahkan dan menyimpan data-data karyawan dan proyek PT. Sandika Kurnia Permata.</p>
@@ -42,29 +42,19 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         font-family: 'Poppins';
         background-image: url('asset/bg.png');
         background-size: 2000px;
-        background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
         height: 100%;
         background-color: #fff;
     }
 
-    h2{
+    h1{
         text-align: center;
         margin: 30px;
         margin-top: 10%;
         font-size: 30px;
         color: #000;
         -webkit-text-stroke: 0.5px #000;
-    }
-    
-    h1 {
-        text-align: center;
-        color: #000;
-        -webkit-text-stroke: 0.5px #fff;
-        margin-top: 100px;
-        font-size: 50px;
-        font-family: 'MuseoModerno';
     }
 
     p {
@@ -79,6 +69,9 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     .btn {
         align-items: center;
         text-align: center;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
     }
 
     .btn-form {
@@ -105,23 +98,22 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
         h1 {
-            font-size: 30px;
-            margin-top: 50px;
-        }
-
-        h2 {
-            font-size: 24px;
+            font-size: 18px;
             margin-top: 20%;
         }
 
         p {
             padding: 0px 20px;
-            font-size: 16px;
+            font-size: 12px;
+        }
+
+        .btn{
+            flex-direction: column;
         }
 
         .btn-form {
-            padding: 15px 30px;
-            font-size: 14px;
+            padding: 10px 20px;
+            font-size: 12px;
             margin: 10px 0px;
         }
     }
